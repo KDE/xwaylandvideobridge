@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+
+Name=screenrecord
+GenericName=A Simple Screen Recording Application
+Icon=screenrecord
+
+Exec=screenrecord
+StartupWMClass=screenrecord
