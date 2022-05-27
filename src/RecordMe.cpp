@@ -230,6 +230,7 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
         notif->setTitle(i18n("Recording failed"));
         notif->setText(i18n("Could not start recording because: %1", error));
         notif->sendEvent();
+        connect(notif, &KNotification::closed, QCoreApplication::instance(), &QCoreApplication::quit);
     });
     connect(m_record, &PipeWireRecord::stateChanged, this, [this] {
         auto state = m_record->state();
