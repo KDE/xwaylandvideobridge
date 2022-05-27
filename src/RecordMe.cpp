@@ -132,8 +132,12 @@ void RecordMe::init(const QDBusObjectPath& path)
 
 void RecordMe::response(uint code, const QVariantMap& results)
 {
-    if (code > 0) {
-        qWarning() << "error!!!" << results;
+    if (code == 1) {
+        qDebug() << "XDG session cancelled";
+        exit(0);
+        return;
+    } else if (code > 0) {
+        qWarning() << "error!!!" << results << code;
         exit(666);
         return;
     }
@@ -166,7 +170,7 @@ void RecordMe::start()
         { QLatin1String("handle_token"), m_handleToken }
     };
 
-    auto reply = iface->Start(m_path, QStringLiteral("org.freedesktop.RecordMe"), startParameters);
+    auto reply = iface->Start(m_path, QStringLiteral("org.kde.screenrecord"), startParameters);
     reply.waitForFinished();
 
     if (reply.isError()) {
@@ -233,18 +237,21 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
         switch(state) {
             case PipeWireRecord::Idle:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Setting up..."));
+                {
+                    KNotification *notif = new KNotification("captured");
+                    notif->setComponentName(QStringLiteral("screenrecord"));
+                    notif->setTitle(i18n("Screen Record"));
+                    notif->setText(i18n("New Recording saved in %1", m_record->output()));
+                    notif->setUrls({QUrl::fromLocalFile(m_record->output())});
+                    notif->sendEvent();
+                    connect(notif, &KNotification::closed, QCoreApplication::instance(), &QCoreApplication::quit);
+                }
                 break;
             case PipeWireRecord::Recording:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Recording..."));
                 break;
             case PipeWireRecord::Rendering:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Writing file..."));
-                KNotification *notif = new KNotification("captured");
-                notif->setComponentName(QStringLiteral("screenrecord"));
-                notif->setTitle(i18n("Screen Record"));
-                notif->setText(i18n("New Recording saved in %1", m_record->output()));
-                notif->setUrls({QUrl::fromLocalFile(m_record->output())});
-                notif->sendEvent();
                 break;
         }
     });

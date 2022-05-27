@@ -21,6 +21,7 @@ target_link_libraries(screenrecord
     K::KPipeWireRecord
 )
 
+install(FILES screenrecord.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 install(TARGETS screenrecord ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.screenrecord.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.screenrecord.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
