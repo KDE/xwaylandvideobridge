@@ -22,5 +22,5 @@ target_link_libraries(screenrecord
 )
 
 install(TARGETS screenrecord ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS org.example.screenrecord.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES org.example.screenrecord.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(PROGRAMS org.kde.screenrecord.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.screenrecord.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
