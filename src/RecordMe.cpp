@@ -219,6 +219,14 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
         m_record->setActive(false);
     });
 
+    connect(m_record, &PipeWireRecord::errorFound, this, [] (const QString &error) {
+        qDebug() << "recoding error!" << error;
+        KNotification *notif = new KNotification("error");
+        notif->setComponentName(QStringLiteral("screenrecord"));
+        notif->setTitle(i18n("Recording failed"));
+        notif->setText(i18n("Could not start recording because: %1", error));
+        notif->sendEvent();
+    });
     connect(m_record, &PipeWireRecord::stateChanged, this, [this] {
         auto state = m_record->state();
         qDebug() << "state changed" << state;
@@ -232,7 +240,7 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
             case PipeWireRecord::Rendering:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Writing file..."));
                 KNotification *notif = new KNotification("captured");
-                notif->setComponentName(QStringLiteral("plasma_phone_components"));
+                notif->setComponentName(QStringLiteral("screenrecord"));
                 notif->setTitle(i18n("Screen Record"));
                 notif->setText(i18n("New Recording saved in %1", m_record->output()));
                 notif->setUrls({QUrl::fromLocalFile(m_record->output())});
