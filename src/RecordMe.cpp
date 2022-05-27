@@ -207,7 +207,10 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
 
     m_record = new PipeWireRecord(this);
     m_record->setOutput(newPath);
-//     m_record->setFd(fd);
+    if (QFileInfo::exists("./flatpak-info")) {
+        qDebug() << "We are in flatpak, pass the fd" << fd;
+        m_record->setFd(fd);
+    }
     m_record->setNodeId(streams.constFirst().nodeId);
     m_record->setActive(true);
 
