@@ -239,6 +239,12 @@ void RecordMe::handleStreams(const QVector<Stream> &streams)
             case PipeWireRecord::Idle:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Setting up..."));
                 {
+                    QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
+                                                          m_path.path(),
+                                                          QLatin1String("org.freedesktop.portal.Session"),
+                                                          QLatin1String("Close"));
+                    QDBusConnection::sessionBus().call(closeScreencastSession);
+
                     KNotification *notif = new KNotification("captured");
                     notif->setComponentName(QStringLiteral("screenrecord"));
                     notif->setTitle(i18n("Screen Record"));
