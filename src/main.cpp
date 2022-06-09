@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RecordMe.h"
+#include "ScreenRecord.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
         parser.process(app);
         about.processCommandLine(&parser);
 
-        new RecordMe(&app);
+        new ScreenRecord(&app);
     }
     return app.exec();
 }

@@ -36,12 +36,12 @@ struct Stream {
 
 class OrgFreedesktopPortalScreenCastInterface;
 
-class RecordMe : public QObject
+class ScreenRecord : public QObject
 {
     Q_OBJECT
 public:
-    RecordMe(QObject* parent = nullptr);
-    ~RecordMe() override;
+    ScreenRecord(QObject* parent = nullptr);
+    ~ScreenRecord() override;
 
     enum CursorModes {
         Hidden = 1,

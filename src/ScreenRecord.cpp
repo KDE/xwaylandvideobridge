@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RecordMe.h"
+#include "ScreenRecord.h"
 #include <QLoggingCategory>
 #include <QTimer>
 
@@ -66,11 +66,11 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, QVector<Stream> &
     return argument;
 }
 
-RecordMe::RecordMe(QObject* parent)
+ScreenRecord::ScreenRecord(QObject* parent)
     : QObject(parent)
     , iface(new OrgFreedesktopPortalScreenCastInterface(
         QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
-    , m_handleToken(QStringLiteral("RecordMe%1").arg(QRandomGenerator::global()->generate()))
+    , m_handleToken(QStringLiteral("ScreenRecord%1").arg(QRandomGenerator::global()->generate()))
     , m_sni(new KStatusNotifierItem(this))
 {
     m_sni->setIconByName("media-record");
@@ -107,9 +107,9 @@ RecordMe::RecordMe(QObject* parent)
     qDBusRegisterMetaType<QVector<Stream>>();
 }
 
-RecordMe::~RecordMe() = default;
+ScreenRecord::~ScreenRecord() = default;
 
-void RecordMe::init(const QDBusObjectPath& path)
+void ScreenRecord::init(const QDBusObjectPath& path)
 {
     m_path = path;
     const QVariantMap sourcesParameters = {
@@ -130,7 +130,7 @@ void RecordMe::init(const QDBusObjectPath& path)
     qDebug() << "select sources done" << reply.value().path();
 }
 
-void RecordMe::response(uint code, const QVariantMap& results)
+void ScreenRecord::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
@@ -164,7 +164,7 @@ void RecordMe::response(uint code, const QVariantMap& results)
     }
 }
 
-void RecordMe::start()
+void ScreenRecord::start()
 {
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
@@ -181,7 +181,7 @@ void RecordMe::start()
     qDebug() << "started!" << reply.value().path();
 }
 
-void RecordMe::handleStreams(const QVector<Stream> &streams)
+void ScreenRecord::handleStreams(const QVector<Stream> &streams)
 {
     Q_ASSERT(streams.count() == 1);
     const QVariantMap startParameters = {

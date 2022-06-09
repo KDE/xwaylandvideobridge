@@ -8,7 +8,7 @@ qt5_add_dbus_interface(
 
 target_sources(screenrecord PRIVATE
     main.cpp
-    RecordMe.cpp
+    ScreenRecord.cpp
     ${XDP_SRCS}
 )
 
