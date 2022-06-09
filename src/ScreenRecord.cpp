@@ -112,11 +112,17 @@ ScreenRecord::~ScreenRecord() = default;
 void ScreenRecord::init(const QDBusObjectPath& path)
 {
     m_path = path;
+    uint32_t cursor_mode;
+    if (iface->availableCursorModes() & (1<<Metadata)) {
+        cursor_mode = Metadata;
+    } else {
+        cursor_mode = Hidden;
+    }
     const QVariantMap sourcesParameters = {
         { QLatin1String("handle_token"), m_handleToken },
         { QLatin1String("types"), uint(Monitor|Window) },
         { QLatin1String("multiple"), false }, //for now?
-        { QLatin1String("cursor_mode"), uint(Metadata) }
+        { QLatin1String("cursor_mode"), uint(cursor_mode) }
     };
 
     auto reply = iface->SelectSources(m_path, sourcesParameters);
