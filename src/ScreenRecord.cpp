@@ -120,7 +120,7 @@ void ScreenRecord::init(const QDBusObjectPath& path)
     }
     const QVariantMap sourcesParameters = {
         { QLatin1String("handle_token"), m_handleToken },
-        { QLatin1String("types"), uint(Monitor|Window) },
+        { QLatin1String("types"), iface->availableSourceTypes() },
         { QLatin1String("multiple"), false }, //for now?
         { QLatin1String("cursor_mode"), uint(cursor_mode) }
     };
