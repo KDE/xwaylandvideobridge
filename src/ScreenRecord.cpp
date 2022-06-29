@@ -113,7 +113,7 @@ void ScreenRecord::init(const QDBusObjectPath& path)
 {
     m_path = path;
     uint32_t cursor_mode;
-    if (iface->availableCursorModes() & (1<<Metadata)) {
+    if (iface->availableCursorModes() & Metadata) {
         cursor_mode = Metadata;
     } else {
         cursor_mode = Hidden;
