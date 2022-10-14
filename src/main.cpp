@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     KLocalizedString::setApplicationDomain("screenrecord");
     {
         KAboutData about("screenrecord", i18n("Screen Record"), "0.1", i18n("Utility recording what's on your screen"),
-                         KAboutLicense::GPL, i18n("(C) 2008-2015 Alex Fiestas and Aleix Pol"));
+                         KAboutLicense::GPL, i18n("(C) 2022 Aleix Pol Gonzalez"));
 
         about.addAuthor("Aleix Pol Gonzalez", i18n("Author"), "aleixpol@kde.org" );
         KAboutData::setApplicationData(about);
