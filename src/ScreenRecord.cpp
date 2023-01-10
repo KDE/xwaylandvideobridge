@@ -229,8 +229,9 @@ void ScreenRecord::handleStreams(const QVector<Stream> &streams)
         m_record->setActive(false);
     });
 
-    connect(m_record, &PipeWireRecord::errorFound, this, [] (const QString &error) {
-        qDebug() << "recoding error!" << error;
+    connect(m_record, &PipeWireRecord::errorFound, this, [this] (const QString &error) {
+        closeSession();
+        qDebug() << "recording error!" << error;
         KNotification *notif = new KNotification("error");
         notif->setComponentName(QStringLiteral("screenrecord"));
         notif->setTitle(i18n("Recording failed"));
@@ -245,11 +246,7 @@ void ScreenRecord::handleStreams(const QVector<Stream> &streams)
             case PipeWireRecord::Idle:
                 m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Setting up..."));
                 {
-                    QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
-                                                          m_path.path(),
-                                                          QLatin1String("org.freedesktop.portal.Session"),
-                                                          QLatin1String("Close"));
-                    QDBusConnection::sessionBus().call(closeScreencastSession);
+                    closeSession();
 
                     KNotification *notif = new KNotification("captured");
                     notif->setComponentName(QStringLiteral("screenrecord"));
@@ -268,4 +265,13 @@ void ScreenRecord::handleStreams(const QVector<Stream> &streams)
                 break;
         }
     });
+}
+
+void ScreenRecord::closeSession()
+{
+    QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
+                                            m_path.path(),
+                                            QLatin1String("org.freedesktop.portal.Session"),
+                                            QLatin1String("Close"));
+    QDBusConnection::sessionBus().call(closeScreencastSession);
 }

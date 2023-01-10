@@ -65,6 +65,7 @@ private:
     void init(const QDBusObjectPath &path);
     void handleStreams(const QVector<Stream> &streams);
     void start();
+    void closeSession();
 
     OrgFreedesktopPortalScreenCastInterface *iface;
     QDBusObjectPath m_path;
