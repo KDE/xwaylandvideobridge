@@ -206,7 +206,7 @@ void ScreenRecord::handleStreams(const QVector<Stream> &streams)
     const int fd = reply.value().fileDescriptor();
 
     const auto now = QDateTime::currentDateTime();
-    const QString name = i18n("Video_%1.mp4", now.toString(Qt::ISODate));
+    const QString name = i18n("Video_%1.%2", now.toString(Qt::ISODate), m_record->extension());
     QString moviesPath = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
     QString newPath(moviesPath + '/' + name);
     if (QFile::exists(newPath)) {
