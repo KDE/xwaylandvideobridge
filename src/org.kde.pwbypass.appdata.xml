@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop-application">
-    <id>org.kde.screenrecord.desktop</id>
+    <id>org.kde.pwbypass.desktop</id>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-2.0-or-later</project_license>
-    <name>Screen Record</name>
+    <name>PipeWire By-Pass</name>
     <summary>Record the contents of your screens and windows</summary>
     <description>
       <p>Allows you record screens and windows into a video file that can easily be shared with anyone.</p>
@@ -14,7 +14,7 @@
     <url type="bugtracker">https://bugs.kde.org</url>
     <url type="donation">https://www.kde.org/community/donations</url>
     <provides>
-        <binary>screenrecord</binary>
+        <binary>pwbypass</binary>
     </provides>
     <project_group>KDE</project_group>
 </component>

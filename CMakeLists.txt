@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(screenrecord)
+project(pwbypass)
 
 set(QT_MIN_VERSION "5.15.0")
 set(KF_MIN_VERSION "5.83.0")
@@ -14,12 +14,11 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMInstallIcons)
 include(FeatureSummary)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui DBus)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus)
 
 find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     CoreAddons
     I18n
-    Notifications
 )
 
 find_package(KPipeWire REQUIRED)

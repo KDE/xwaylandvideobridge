@@ -1,5 +1,5 @@
 /*
- * App To Record systems using xdg-desktop-portal
+ * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
  * 
  * This program is free software; you can redistribute it and/or
@@ -19,14 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScreenRecord.h"
+#include "pwbypass.h"
+#include <QGuiApplication>
 #include <QLoggingCategory>
 #include <QTimer>
+#include <QQmlApplicationEngine>
 
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
-#include <KNotification>
 
 Q_DECLARE_METATYPE(Stream)
 
@@ -66,19 +67,13 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, QVector<Stream> &
     return argument;
 }
 
-ScreenRecord::ScreenRecord(QObject* parent)
+pwbypass::pwbypass(QObject* parent)
     : QObject(parent)
     , iface(new OrgFreedesktopPortalScreenCastInterface(
         QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
-    , m_handleToken(QStringLiteral("ScreenRecord%1").arg(QRandomGenerator::global()->generate()))
-    , m_sni(new KStatusNotifierItem(this))
+    , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
+    , m_engine(new QQmlApplicationEngine(this))
 {
-    m_sni->setIconByName("media-record");
-    m_sni->setTitle(i18n("Screen Record"));
-    m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Figuring out what to record"));
-    m_sni->setStandardActionsEnabled(false);
-    m_sni->setStatus(KStatusNotifierItem::Active);
-
     const QVariantMap sessionParameters = {
         { QLatin1String("session_handle_token"), m_handleToken },
         { QLatin1String("handle_token"), m_handleToken }
@@ -107,9 +102,9 @@ ScreenRecord::ScreenRecord(QObject* parent)
     qDBusRegisterMetaType<QVector<Stream>>();
 }
 
-ScreenRecord::~ScreenRecord() = default;
+pwbypass::~pwbypass() = default;
 
-void ScreenRecord::init(const QDBusObjectPath& path)
+void pwbypass::init(const QDBusObjectPath& path)
 {
     m_path = path;
     uint32_t cursor_mode;
@@ -136,7 +131,7 @@ void ScreenRecord::init(const QDBusObjectPath& path)
     qDebug() << "select sources done" << reply.value().path();
 }
 
-void ScreenRecord::response(uint code, const QVariantMap& results)
+void pwbypass::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
@@ -170,13 +165,13 @@ void ScreenRecord::response(uint code, const QVariantMap& results)
     }
 }
 
-void ScreenRecord::start()
+void pwbypass::start()
 {
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
     };
 
-    auto reply = iface->Start(m_path, QStringLiteral("org.kde.screenrecord"), startParameters);
+    auto reply = iface->Start(m_path, QStringLiteral("org.kde.pwbypass"), startParameters);
     reply.waitForFinished();
 
     if (reply.isError()) {
@@ -187,9 +182,8 @@ void ScreenRecord::start()
     qDebug() << "started!" << reply.value().path();
 }
 
-void ScreenRecord::handleStreams(const QVector<Stream> &streams)
+void pwbypass::handleStreams(const QVector<Stream> &streams)
 {
-    Q_ASSERT(streams.count() == 1);
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
     };
@@ -202,72 +196,19 @@ void ScreenRecord::handleStreams(const QVector<Stream> &streams)
         exit(1);
         return;
     }
+    const int fd = reply.value().takeFileDescriptor();
 
-    const int fd = reply.value().fileDescriptor();
-
-    const auto now = QDateTime::currentDateTime();
-    const QString name = i18n("Video_%1.%2", now.toString(Qt::ISODate), m_record->extension());
-    QString moviesPath = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
-    QString newPath(moviesPath + '/' + name);
-    if (QFile::exists(newPath)) {
-        newPath = moviesPath + '/' + KFileUtils::suggestName(QUrl::fromLocalFile(newPath), name);
+    for (const Stream &stream : streams) {
+        m_engine->setInitialProperties({
+            { "nodeId", stream.nodeId },
+            { "fd", fd },
+            { "visible", true },
+        });
+        m_engine->load("qrc:/PipeWireWindow.qml");
     }
-
-    qDebug() << "recording" << fd << streams.constFirst().nodeId << "into" << newPath;
-
-    m_record = new PipeWireRecord(this);
-    m_record->setOutput(newPath);
-    if (QFileInfo::exists("/.flatpak-info")) {
-        qDebug() << "We are in flatpak, pass the fd" << fd;
-        m_record->setFd(fd);
-    }
-    m_record->setNodeId(streams.constFirst().nodeId);
-    m_record->setActive(true);
-
-    connect(m_sni, &KStatusNotifierItem::activateRequested, this, [this] {
-        qDebug() << "stop the recoding!" << m_record->output();
-        m_record->setActive(false);
-    });
-
-    connect(m_record, &PipeWireRecord::errorFound, this, [this] (const QString &error) {
-        closeSession();
-        qDebug() << "recording error!" << error;
-        KNotification *notif = new KNotification("error");
-        notif->setComponentName(QStringLiteral("screenrecord"));
-        notif->setTitle(i18n("Recording failed"));
-        notif->setText(i18n("Could not start recording because: %1", error));
-        notif->sendEvent();
-        connect(notif, &KNotification::closed, QCoreApplication::instance(), &QCoreApplication::quit);
-    });
-    connect(m_record, &PipeWireRecord::stateChanged, this, [this] {
-        auto state = m_record->state();
-        qDebug() << "state changed" << state;
-        switch(state) {
-            case PipeWireRecord::Idle:
-                m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Setting up..."));
-                {
-                    closeSession();
-
-                    KNotification *notif = new KNotification("captured");
-                    notif->setComponentName(QStringLiteral("screenrecord"));
-                    notif->setTitle(i18n("Screen Record"));
-                    notif->setText(i18n("New Recording saved in %1", m_record->output()));
-                    notif->setUrls({QUrl::fromLocalFile(m_record->output())});
-                    notif->sendEvent();
-                    connect(notif, &KNotification::closed, QCoreApplication::instance(), &QCoreApplication::quit);
-                }
-                break;
-            case PipeWireRecord::Recording:
-                m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Recording..."));
-                break;
-            case PipeWireRecord::Rendering:
-                m_sni->setToolTip("media-record", i18n("Screen Record"), i18n("Writing file..."));
-                break;
-        }
-    });
 }
 
-void ScreenRecord::closeSession()
+void pwbypass::closeSession()
 {
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                             m_path.path(),

@@ -1,5 +1,5 @@
 /*
- * App To Record systems using xdg-desktop-portal
+ * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <QDBusObjectPath>
-#include <KStatusNotifierItem>
 #include <PipeWireRecord>
 
 class QTimer;
@@ -36,12 +35,12 @@ struct Stream {
 
 class OrgFreedesktopPortalScreenCastInterface;
 
-class ScreenRecord : public QObject
+class pwbypass : public QObject
 {
     Q_OBJECT
 public:
-    ScreenRecord(QObject* parent = nullptr);
-    ~ScreenRecord() override;
+    pwbypass(QObject* parent = nullptr);
+    ~pwbypass() override;
 
     enum CursorModes {
         Hidden = 1,
@@ -66,10 +65,11 @@ private:
     void handleStreams(const QVector<Stream> &streams);
     void start();
     void closeSession();
+    void closed();
 
     OrgFreedesktopPortalScreenCastInterface *iface;
     QDBusObjectPath m_path;
     const QString m_handleToken;
-    KStatusNotifierItem *const m_sni;
-    PipeWireRecord *m_record = nullptr;
+
+    QQmlApplicationEngine* const m_engine;
 };

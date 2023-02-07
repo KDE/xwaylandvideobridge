@@ -1,4 +1,4 @@
-add_executable(screenrecord)
+add_executable(pwbypass)
 
 qt5_add_dbus_interface(
    XDP_SRCS
@@ -6,22 +6,22 @@ qt5_add_dbus_interface(
    xdp_dbus_screencast_interface
 )
 
-target_sources(screenrecord PRIVATE
+target_sources(pwbypass PRIVATE
     main.cpp
-    ScreenRecord.cpp
+    pwbypass.cpp
+    resources.qrc
     ${XDP_SRCS}
 )
 
-target_link_libraries(screenrecord
-    KF5::Notifications
+target_link_libraries(pwbypass
     KF5::I18n
     KF5::CoreAddons
-    Qt5::Gui
+    Qt5::Quick
     Qt5::DBus
     K::KPipeWireRecord
 )
 
-install(FILES screenrecord.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
-install(TARGETS screenrecord ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS org.kde.screenrecord.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES org.kde.screenrecord.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES pwbypass.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
+install(TARGETS pwbypass ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(PROGRAMS org.kde.pwbypass.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.pwbypass.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

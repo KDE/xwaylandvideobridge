@@ -1,5 +1,5 @@
 /*
- * App To Record systems using xdg-desktop-portal
+ * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScreenRecord.h"
+#include "pwbypass.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QCommandLineParser>
 #include <QIcon>
 #include <KLocalizedString>
@@ -29,23 +29,22 @@
 
 int main(int argc, char **argv)
 {
-    // KSNI needs a QApplication for QMenu
-    QApplication app(argc, argv);app.setAttribute(Qt::AA_UseHighDpiPixmaps);
-    KLocalizedString::setApplicationDomain("screenrecord");
+    QGuiApplication app(argc, argv);app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    KLocalizedString::setApplicationDomain("pwbypass");
     {
-        KAboutData about("screenrecord", i18n("Screen Record"), "0.1", i18n("Utility recording what's on your screen"),
+        KAboutData about("pwbypass", i18n("PipeWire By-Pass"), "0.1", i18n("Utility recording what's on your screen"),
                          KAboutLicense::GPL, i18n("(C) 2022 Aleix Pol Gonzalez"));
 
         about.addAuthor("Aleix Pol Gonzalez", i18n("Author"), "aleixpol@kde.org" );
         KAboutData::setApplicationData(about);
-        QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("screenrecord"), app.windowIcon()));
+        QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("pwbypass"), app.windowIcon()));
 
         QCommandLineParser parser;
         about.setupCommandLine(&parser);
         parser.process(app);
         about.processCommandLine(&parser);
 
-        new ScreenRecord(&app);
+        new pwbypass(&app);
     }
     return app.exec();
 }
