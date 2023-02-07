@@ -12,6 +12,7 @@ Window
 {
     property alias fd: sourceItem.fd
     property alias nodeId: sourceItem.nodeId
+    title: "Remote stream"
 
     PipeWire.PipeWireSourceItem {
         id: sourceItem
