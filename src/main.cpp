@@ -29,7 +29,10 @@
 
 int main(int argc, char **argv)
 {
+    qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
     QGuiApplication app(argc, argv);app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    qunsetenv("QT_XCB_GL_INTEGRATION");
+
     KLocalizedString::setApplicationDomain("pwbypass");
     {
         KAboutData about("pwbypass", i18n("PipeWire By-Pass"), "0.1", i18n("Utility recording what's on your screen"),
