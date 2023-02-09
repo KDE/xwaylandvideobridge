@@ -28,6 +28,7 @@
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
+#include <KWindowSystem>
 
 #include <KPipeWire/pipewiresourceitem.h>
 
@@ -218,9 +219,18 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
         m_window->resize(pipewireSource->size().toSize());
     });
 
-    m_window->setTitle("Wayland to X Recording bridge");
+    m_window->setTitle(i18n("Wayland to X Recording bridge"));
 
+    //  hide the window from rendering
+    // don't let any window manager developers see this
+    m_window->winId();
+    m_window->setOpacity(0);
+    m_window->lower();
+    m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
+    m_window->setFlag(Qt::WindowTransparentForInput);
+    KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
     m_window->show();
+
 }
 
 void PwBypass::closeSession()

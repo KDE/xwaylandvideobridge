@@ -15,6 +15,7 @@ target_sources(pwbypass PRIVATE
 target_link_libraries(pwbypass
     KF5::I18n
     KF5::CoreAddons
+    KF5::WindowSystem
     Qt5::Quick
     Qt5::DBus
     K::KPipeWireRecord
