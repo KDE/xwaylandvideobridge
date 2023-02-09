@@ -218,6 +218,7 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
         m_window->resize(pipewireSource->size().toSize());
     });
 
+    m_window->setTitle("Wayland to X Recording bridge");
 
     m_window->show();
 }
