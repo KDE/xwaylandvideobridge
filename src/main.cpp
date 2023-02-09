@@ -29,9 +29,11 @@
 
 int main(int argc, char **argv)
 {
+    qputenv("QT_QPA_PLATFORM", "xcb");
     qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
     QGuiApplication app(argc, argv);app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     qunsetenv("QT_XCB_GL_INTEGRATION");
+    qunsetenv("QT_QPA_PLATFORM");
 
     KLocalizedString::setApplicationDomain("pwbypass");
     {
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
         parser.process(app);
         about.processCommandLine(&parser);
 
-        new pwbypass(&app);
+        new PwBypass(&app);
     }
     return app.exec();
 }

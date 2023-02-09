@@ -23,11 +23,13 @@
 #include <QGuiApplication>
 #include <QLoggingCategory>
 #include <QTimer>
-#include <QQmlApplicationEngine>
+#include <QQuickWindow>
 
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
+
+#include <KPipeWire/pipewiresourceitem.h>
 
 Q_DECLARE_METATYPE(Stream)
 
@@ -67,12 +69,12 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, QVector<Stream> &
     return argument;
 }
 
-pwbypass::pwbypass(QObject* parent)
+PwBypass::PwBypass(QObject* parent)
     : QObject(parent)
     , iface(new OrgFreedesktopPortalScreenCastInterface(
         QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
     , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
-    , m_engine(new QQmlApplicationEngine(this))
+    , m_window(new QQuickWindow)
 {
     const QVariantMap sessionParameters = {
         { QLatin1String("session_handle_token"), m_handleToken },
@@ -102,17 +104,12 @@ pwbypass::pwbypass(QObject* parent)
     qDBusRegisterMetaType<QVector<Stream>>();
 }
 
-pwbypass::~pwbypass() = default;
+PwBypass::~PwBypass() = default;
 
-void pwbypass::init(const QDBusObjectPath& path)
+void PwBypass::init(const QDBusObjectPath& path)
 {
     m_path = path;
-    uint32_t cursor_mode;
-    if (iface->availableCursorModes() & Metadata) {
-        cursor_mode = Metadata;
-    } else {
-        cursor_mode = Hidden;
-    }
+    uint32_t cursor_mode = Hidden;
     const QVariantMap sourcesParameters = {
         { QLatin1String("handle_token"), m_handleToken },
         { QLatin1String("types"), iface->availableSourceTypes() },
@@ -131,7 +128,7 @@ void pwbypass::init(const QDBusObjectPath& path)
     qDebug() << "select sources done" << reply.value().path();
 }
 
-void pwbypass::response(uint code, const QVariantMap& results)
+void PwBypass::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
@@ -165,7 +162,7 @@ void pwbypass::response(uint code, const QVariantMap& results)
     }
 }
 
-void pwbypass::start()
+void PwBypass::start()
 {
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
@@ -182,7 +179,7 @@ void pwbypass::start()
     qDebug() << "started!" << reply.value().path();
 }
 
-void pwbypass::handleStreams(const QVector<Stream> &streams)
+void PwBypass::handleStreams(const QVector<Stream> &streams)
 {
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
@@ -198,17 +195,34 @@ void pwbypass::handleStreams(const QVector<Stream> &streams)
     }
     const int fd = reply.value().takeFileDescriptor();
 
-    for (const Stream &stream : streams) {
-        m_engine->setInitialProperties({
-            { "nodeId", stream.nodeId },
-            { "fd", fd },
-            { "visible", true },
-        });
-        m_engine->load("qrc:/PipeWireWindow.qml");
+    if (streams.count() < 1) {
+        qWarning() << "No streams available";
+        exit(1);
     }
+
+    auto pipewireSource = new PipeWireSourceItem(m_window->contentItem());
+    pipewireSource->setNodeId(streams[0].nodeId);
+    pipewireSource->setFd(fd);
+    pipewireSource->setVisible(true);
+
+    pipewireSource->setSize(pipewireSource->naturalSize());
+    connect(pipewireSource, &PipeWireSourceItem::naturalSizeChanged, this, [pipewireSource]() {
+        pipewireSource->setSize(pipewireSource->naturalSize());
+    });
+
+    m_window->resize(pipewireSource->size().toSize());
+    connect(pipewireSource, &QQuickItem::widthChanged, this, [this, pipewireSource]() {
+        m_window->resize(pipewireSource->size().toSize());
+    });
+    connect(pipewireSource, &QQuickItem::heightChanged, this, [this, pipewireSource]() {
+        m_window->resize(pipewireSource->size().toSize());
+    });
+
+
+    m_window->show();
 }
 
-void pwbypass::closeSession()
+void PwBypass::closeSession()
 {
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                             m_path.path(),

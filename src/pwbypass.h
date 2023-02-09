@@ -26,7 +26,7 @@
 #include <PipeWireRecord>
 
 class QTimer;
-class QQmlApplicationEngine;
+class QQuickWindow;
 
 struct Stream {
     uint nodeId;
@@ -35,12 +35,12 @@ struct Stream {
 
 class OrgFreedesktopPortalScreenCastInterface;
 
-class pwbypass : public QObject
+class PwBypass : public QObject
 {
     Q_OBJECT
 public:
-    pwbypass(QObject* parent = nullptr);
-    ~pwbypass() override;
+    PwBypass(QObject* parent = nullptr);
+    ~PwBypass() override;
 
     enum CursorModes {
         Hidden = 1,
@@ -71,5 +71,5 @@ private:
     QDBusObjectPath m_path;
     const QString m_handleToken;
 
-    QQmlApplicationEngine* const m_engine;
+    QScopedPointer<QQuickWindow> m_window;
 };

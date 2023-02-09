@@ -9,7 +9,6 @@ qt5_add_dbus_interface(
 target_sources(pwbypass PRIVATE
     main.cpp
     pwbypass.cpp
-    resources.qrc
     ${XDP_SRCS}
 )
 
