@@ -28,6 +28,8 @@
 class QTimer;
 class QQuickWindow;
 
+class KStatusNotifierItem;
+
 struct Stream {
     uint nodeId;
     QVariantMap opts;
@@ -72,4 +74,5 @@ private:
     const QString m_handleToken;
 
     QScopedPointer<QQuickWindow> m_window;
+    KStatusNotifierItem *m_sni;
 };

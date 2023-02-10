@@ -21,17 +21,20 @@
 
 #include "pwbypass.h"
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QCommandLineParser>
 #include <QIcon>
 #include <KLocalizedString>
 #include <KAboutData>
 
+#include <KMessageBox>
+
 int main(int argc, char **argv)
 {
     qputenv("QT_QPA_PLATFORM", "xcb");
     qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
-    QGuiApplication app(argc, argv);app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication app(argc, argv); // widgets are needed just for the SNI.
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     qunsetenv("QT_XCB_GL_INTEGRATION");
     qunsetenv("QT_QPA_PLATFORM");
 
@@ -48,6 +51,9 @@ int main(int argc, char **argv)
         about.setupCommandLine(&parser);
         parser.process(app);
         about.processCommandLine(&parser);
+
+        KMessageBox::information(nullptr, i18n("This tool allows legacy applications to access windows and screen content that would otherwise be blocked.\nAt the prompt select a window or screen to share, it should then be visible in your original app.\nWhen you are finished with streaming you can close this tool from the system tray."), i18n("Pipewire to X11 Proxy"), "promptPipewireProxy");
+
 
         new PwBypass(&app);
     }

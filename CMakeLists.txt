@@ -20,6 +20,8 @@ find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     CoreAddons
     I18n
     WindowSystem
+    Notifications
+    WidgetsAddons
 )
 
 find_package(KPipeWire REQUIRED)

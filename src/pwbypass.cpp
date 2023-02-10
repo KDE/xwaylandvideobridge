@@ -24,11 +24,13 @@
 #include <QLoggingCategory>
 #include <QTimer>
 #include <QQuickWindow>
+#include <QAction>
 
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
 #include <KWindowSystem>
+#include <KStatusNotifierItem>
 
 #include <KPipeWire/pipewiresourceitem.h>
 
@@ -76,6 +78,7 @@ PwBypass::PwBypass(QObject* parent)
         QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
     , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
     , m_window(new QQuickWindow)
+    , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     const QVariantMap sessionParameters = {
         { QLatin1String("session_handle_token"), m_handleToken },
@@ -103,6 +106,13 @@ PwBypass::PwBypass(QObject* parent)
 
     qDBusRegisterMetaType<Stream>();
     qDBusRegisterMetaType<QVector<Stream>>();
+
+    m_sni->setTitle("Exposing application to X11");
+    m_sni->setIconByName("video-display");
+    auto closeAction = new QAction(i18n("Close"), this);
+    connect(closeAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    m_sni->addAction("closeAction", closeAction);
+    m_sni->setStatus(KStatusNotifierItem::Active);
 }
 
 PwBypass::~PwBypass() = default;
@@ -230,6 +240,8 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     m_window->setFlag(Qt::WindowTransparentForInput);
     KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
     m_window->show();
+
+
 
 }
 
