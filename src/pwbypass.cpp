@@ -216,9 +216,9 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     pipewireSource->setFd(fd);
     pipewireSource->setVisible(true);
 
-    pipewireSource->setSize(pipewireSource->naturalSize());
-    connect(pipewireSource, &PipeWireSourceItem::naturalSizeChanged, this, [pipewireSource]() {
-        pipewireSource->setSize(pipewireSource->naturalSize());
+    pipewireSource->setSize(pipewireSource->streamSize());
+    connect(pipewireSource, &PipeWireSourceItem::streamSizeChanged, this, [pipewireSource]() {
+        pipewireSource->setSize(pipewireSource->streamSize());
     });
 
     m_window->resize(pipewireSource->size().toSize());
