@@ -212,8 +212,8 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     }
 
     auto pipewireSource = new PipeWireSourceItem(m_window->contentItem());
-    pipewireSource->setNodeId(streams[0].nodeId);
     pipewireSource->setFd(fd);
+    pipewireSource->setNodeId(streams[0].nodeId);
     pipewireSource->setVisible(true);
 
     pipewireSource->setSize(pipewireSource->streamSize());
@@ -228,8 +228,8 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     connect(pipewireSource, &QQuickItem::heightChanged, this, [this, pipewireSource]() {
         m_window->resize(pipewireSource->size().toSize());
     });
-    connect(pipewireSource, &PipeWireSourceItem::activeChanged, this, [this, pipewireSource]{
-        if (!pipewireSource->isActive()) {
+    connect(pipewireSource, &PipeWireSourceItem::stateChanged, this, [this, pipewireSource]{
+        if (pipewireSource->state() == PipeWireSourceItem::StreamState::Unconnected) {
             closeSession();
         }
     });
