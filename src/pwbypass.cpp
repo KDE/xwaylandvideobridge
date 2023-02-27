@@ -110,7 +110,7 @@ PwBypass::PwBypass(QObject* parent)
     m_sni->setTitle("Exposing application to X11");
     m_sni->setIconByName("video-display");
     auto closeAction = new QAction(i18n("Close"), this);
-    connect(closeAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    connect(closeAction, &QAction::triggered, this, &PwBypass::closeSession);
     m_sni->addAction("closeAction", closeAction);
     m_sni->setStatus(KStatusNotifierItem::Active);
 }
@@ -212,8 +212,8 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     }
 
     auto pipewireSource = new PipeWireSourceItem(m_window->contentItem());
-    pipewireSource->setNodeId(streams[0].nodeId);
     pipewireSource->setFd(fd);
+    pipewireSource->setNodeId(streams[0].nodeId);
     pipewireSource->setVisible(true);
 
     pipewireSource->setSize(pipewireSource->streamSize());
@@ -227,6 +227,11 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     });
     connect(pipewireSource, &QQuickItem::heightChanged, this, [this, pipewireSource]() {
         m_window->resize(pipewireSource->size().toSize());
+    });
+    connect(pipewireSource, &PipeWireSourceItem::stateChanged, this, [this, pipewireSource]{
+        if (pipewireSource->state() == PipeWireSourceItem::StreamState::Unconnected) {
+            closeSession();
+        }
     });
 
     m_window->setTitle(i18n("Wayland to X Recording bridge"));
@@ -247,9 +252,13 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 
 void PwBypass::closeSession()
 {
+    if (m_path.path().isEmpty())
+        return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                             m_path.path(),
                                             QLatin1String("org.freedesktop.portal.Session"),
                                             QLatin1String("Close"));
+    m_path = {};
     QDBusConnection::sessionBus().call(closeScreencastSession);
+    qGuiApp->quit();
 }
