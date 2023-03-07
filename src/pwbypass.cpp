@@ -92,7 +92,7 @@ PwBypass::PwBypass(QObject* parent)
     // don't let any window manager developers see this
 //    m_window->setFlag(Qt::FramelessWindowHint); // we want this but then apps like discord ignore us :/
 
-    m_window->setOpacity(0);
+    m_window->setOpacity(100);
     m_window->setFlag(Qt::WindowStaysOnBottomHint);
     m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
     m_window->setFlag(Qt::WindowTransparentForInput);
@@ -109,6 +109,7 @@ PwBypass::PwBypass(QObject* parent)
                 init();
             }
         } else {
+            qDebug() << "starting quit timer";
             m_quitTimer->start();
         }
     });
@@ -275,6 +276,7 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 
 void PwBypass::closeSession()
 {
+    qDebug() << "close";
     if (m_path.path().isEmpty())
         return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),

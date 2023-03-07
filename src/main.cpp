@@ -27,9 +27,6 @@
 #include <KLocalizedString>
 #include <KAboutData>
 
-//TODO
-//
-
 int main(int argc, char **argv)
 {
     qputenv("QT_QPA_PLATFORM", "xcb");
