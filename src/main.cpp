@@ -27,7 +27,8 @@
 #include <KLocalizedString>
 #include <KAboutData>
 
-#include <KMessageBox>
+//TODO
+//
 
 int main(int argc, char **argv)
 {

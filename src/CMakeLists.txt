@@ -18,7 +18,6 @@ target_link_libraries(pwbypass
     KF5::CoreAddons
     KF5::WindowSystem
     KF5::Notifications
-    KF5::WidgetsAddons
     Qt5::Quick
     Qt5::DBus
     K::KPipeWireRecord
