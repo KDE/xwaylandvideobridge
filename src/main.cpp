@@ -44,6 +44,8 @@ int main(int argc, char **argv)
                          KAboutLicense::GPL, i18n("(C) 2022 Aleix Pol Gonzalez"));
 
         about.addAuthor("Aleix Pol Gonzalez", i18n("Author"), "aleixpol@kde.org" );
+        about.addAuthor("David Edmundson", i18n("Author"), "davidedmundson@kde.org" );
+
         KAboutData::setApplicationData(about);
         QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("pwbypass"), app.windowIcon()));
 
@@ -51,9 +53,6 @@ int main(int argc, char **argv)
         about.setupCommandLine(&parser);
         parser.process(app);
         about.processCommandLine(&parser);
-
-        KMessageBox::information(nullptr, i18n("This tool allows legacy applications to access windows and screen content that would otherwise be blocked.\nAt the prompt select a window or screen to share, it should then be visible in your original app.\nWhen you are finished with streaming you can close this tool from the system tray."), i18n("Pipewire to X11 Proxy"), "promptPipewireProxy");
-
 
         new PwBypass(&app);
     }

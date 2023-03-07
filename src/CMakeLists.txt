@@ -9,6 +9,7 @@ qt5_add_dbus_interface(
 target_sources(pwbypass PRIVATE
     main.cpp
     pwbypass.cpp
+    x11recordingnotifier.cpp
     ${XDP_SRCS}
 )
 
@@ -21,6 +22,9 @@ target_link_libraries(pwbypass
     Qt5::Quick
     Qt5::DBus
     K::KPipeWireRecord
+    XCB::XCB
+    XCB::COMPOSITE
+    XCB::RECORD
 )
 
 install(FILES pwbypass.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
