@@ -115,7 +115,7 @@ X11RecordingNotifier::~X11RecordingNotifier()
 
 bool X11RecordingNotifier::isRedirected() const
 {
-    return m_redirectionCount.isEmpty();
+    return !m_redirectionCount.isEmpty();
 }
 
 void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t *reply)
@@ -128,7 +128,6 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t *re
     });
 
     if (reply->category == 3) {
-        m_redirectionCount.take(reply->xid_base);
         return;
     }
 
