@@ -101,7 +101,6 @@ PwBypass::PwBypass(QObject* parent)
     auto notifier = new X11RecordingNotifier(m_window->winId(), this);
 
     connect(notifier, &X11RecordingNotifier::isRedirectedChanged, this, [this, notifier]() {
-        qDebug() << "changed" << notifier->isRedirected();
         if (notifier->isRedirected()) {
             m_quitTimer->stop();
             // this is a bit racey, there's a point where we wait for a reply
@@ -109,7 +108,6 @@ PwBypass::PwBypass(QObject* parent)
                 init();
             }
         } else {
-            qDebug() << "starting quit timer";
             m_quitTimer->start();
         }
     });
