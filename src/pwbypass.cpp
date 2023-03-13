@@ -84,6 +84,7 @@ PwBypass::PwBypass(QObject* parent)
     , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     m_quitTimer->setInterval(5000);
+    m_quitTimer->setSingleShot(true);
     connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
 
     auto notifier = new X11RecordingNotifier(m_window->winId(), this);
@@ -130,7 +131,7 @@ void PwBypass::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
-        exit(0);
+        closeSession();
         return;
     } else if (code > 0) {
         qWarning() << "error!!!" << results << code;
@@ -268,6 +269,7 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 void PwBypass::closeSession()
 {
     qDebug() << "close";
+    m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
     m_quitTimer->stop();
     if (m_path.path().isEmpty())
         return;
@@ -276,9 +278,11 @@ void PwBypass::closeSession()
                                                                          QLatin1String("org.freedesktop.portal.Session"),
                                                                          QLatin1String("Close"));
     m_path = {};
-    m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
-    disconnect(m_pipeWireItem, nullptr, this, nullptr);
-    m_pipeWireItem->deleteLater();
-    m_pipeWireItem = nullptr;
+
+    if (m_pipeWireItem) {
+        disconnect(m_pipeWireItem, nullptr, this, nullptr);
+        m_pipeWireItem->deleteLater();
+        m_pipeWireItem = nullptr;
+    }
     QDBusConnection::sessionBus().call(closeScreencastSession);
 }
