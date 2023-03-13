@@ -26,7 +26,8 @@
 #include <PipeWireRecord>
 
 class QTimer;
-class QQuickWindow;
+class ContentsWindow;
+class PipeWireSourceItem;
 
 class KStatusNotifierItem;
 
@@ -72,9 +73,10 @@ private:
 
     OrgFreedesktopPortalScreenCastInterface *iface;
     QDBusObjectPath m_path;
-    const QString m_handleToken;
+    QString m_handleToken;
 
     QTimer *m_quitTimer;
-    QScopedPointer<QQuickWindow> m_window;
+    QScopedPointer<ContentsWindow> m_window;
+    PipeWireSourceItem *m_pipeWireItem = nullptr;
     KStatusNotifierItem *m_sni;
 };

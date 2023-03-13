@@ -14,7 +14,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMInstallIcons)
 include(FeatureSummary)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus X11Extras)
 
 find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     CoreAddons

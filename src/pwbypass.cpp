@@ -1,6 +1,7 @@
 /*
  * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2023 David Edmundson <davidedmundson@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -26,10 +27,10 @@
 #include <QQuickWindow>
 #include <QAction>
 
+#include "contentswindow.h"
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
-#include <KWindowSystem>
 #include <KStatusNotifierItem>
 
 #include <KPipeWire/pipewiresourceitem.h>
@@ -79,31 +80,19 @@ PwBypass::PwBypass(QObject* parent)
                 QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
     , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
     , m_quitTimer(new QTimer(this))
-    , m_window(new QQuickWindow)
+    , m_window(new ContentsWindow)
     , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     m_quitTimer->setInterval(5000);
+    m_quitTimer->setSingleShot(true);
     connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
-
-    m_window->winId();
-    m_window->resize(100,100);
-    m_window->setTitle(i18n("Wayland to X Recording bridge"));
-    //  hide the window from rendering
-    // don't let any window manager developers see this
-//    m_window->setFlag(Qt::FramelessWindowHint); // we want this but then apps like discord ignore us :/
-
-    m_window->setOpacity(100);
-    m_window->setFlag(Qt::WindowStaysOnBottomHint);
-    m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
-    m_window->setFlag(Qt::WindowTransparentForInput);
-    KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     auto notifier = new X11RecordingNotifier(m_window->winId(), this);
 
     connect(notifier, &X11RecordingNotifier::isRedirectedChanged, this, [this, notifier]() {
         if (notifier->isRedirected()) {
             m_quitTimer->stop();
-            // this is a bit racey, there's a point where we wait for a reply
+            // this is a bit racey, there's a point where we wait for a reply from the portal
             if (m_path.path().isEmpty()) {
                 init();
             }
@@ -142,7 +131,7 @@ void PwBypass::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
-        exit(0);
+        closeSession();
         return;
     } else if (code > 0) {
         qWarning() << "error!!!" << results << code;
@@ -248,25 +237,30 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
         exit(1);
     }
 
-    auto pipewireSource = new PipeWireSourceItem(m_window->contentItem());
-    pipewireSource->setFd(fd);
-    pipewireSource->setNodeId(streams[0].nodeId);
-    pipewireSource->setVisible(true);
+    m_pipeWireItem = new PipeWireSourceItem(m_window->contentItem());
+    m_pipeWireItem->setFd(fd);
+    m_pipeWireItem->setNodeId(streams[0].nodeId);
+    m_pipeWireItem->setVisible(true);
 
-    pipewireSource->setSize(pipewireSource->streamSize());
-    connect(pipewireSource, &PipeWireSourceItem::streamSizeChanged, this, [pipewireSource]() {
-        pipewireSource->setSize(pipewireSource->streamSize());
+    if (m_pipeWireItem->state() == PipeWireSourceItem::StreamState::Streaming) {
+        m_pipeWireItem->setSize(m_pipeWireItem->streamSize());
+        m_window->resize(m_pipeWireItem->size().toSize());
+    }
+
+    connect(m_pipeWireItem, &PipeWireSourceItem::streamSizeChanged, this, [this]() {
+        m_pipeWireItem->setSize(m_pipeWireItem->streamSize());
     });
 
-    m_window->resize(pipewireSource->size().toSize());
-    connect(pipewireSource, &QQuickItem::widthChanged, this, [this, pipewireSource]() {
-        m_window->resize(pipewireSource->size().toSize());
+
+    connect(m_pipeWireItem, &QQuickItem::widthChanged, this, [this]() {
+        m_window->resize(m_pipeWireItem->size().toSize());
     });
-    connect(pipewireSource, &QQuickItem::heightChanged, this, [this, pipewireSource]() {
-        m_window->resize(pipewireSource->size().toSize());
+    connect(m_pipeWireItem, &QQuickItem::heightChanged, this, [this]() {
+        m_window->resize(m_pipeWireItem->size().toSize());
     });
-    connect(pipewireSource, &PipeWireSourceItem::stateChanged, this, [this, pipewireSource]{
-        if (pipewireSource->state() == PipeWireSourceItem::StreamState::Unconnected) {
+
+    connect(m_pipeWireItem, &PipeWireSourceItem::stateChanged, this, [this]{
+        if (m_pipeWireItem->state() == PipeWireSourceItem::StreamState::Unconnected) {
             closeSession();
         }
     });
@@ -275,6 +269,8 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 void PwBypass::closeSession()
 {
     qDebug() << "close";
+    m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
+    m_quitTimer->stop();
     if (m_path.path().isEmpty())
         return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
@@ -282,6 +278,11 @@ void PwBypass::closeSession()
                                                                          QLatin1String("org.freedesktop.portal.Session"),
                                                                          QLatin1String("Close"));
     m_path = {};
+
+    if (m_pipeWireItem) {
+        disconnect(m_pipeWireItem, nullptr, this, nullptr);
+        m_pipeWireItem->deleteLater();
+        m_pipeWireItem = nullptr;
+    }
     QDBusConnection::sessionBus().call(closeScreencastSession);
-    qGuiApp->quit();
 }

@@ -1,6 +1,7 @@
 /*
  * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2023 David Edmundson <davidedmundson@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,6 +32,8 @@ int main(int argc, char **argv)
 {
     qputenv("QT_QPA_PLATFORM", "xcb");
     qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+    qputenv("QT_QPA_UPDATE_IDLE_TIME", 0);
+    qputenv("QSG_RENDER_LOOP", "basic");
     QApplication app(argc, argv); // widgets are needed just for the SNI.
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     qunsetenv("QT_XCB_GL_INTEGRATION");
