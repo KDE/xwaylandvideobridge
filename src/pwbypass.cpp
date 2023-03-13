@@ -87,6 +87,9 @@ PwBypass::PwBypass(QObject* parent)
     m_quitTimer->setSingleShot(true);
     connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
 
+
+
+
     auto notifier = new X11RecordingNotifier(m_window->winId(), this);
 
     connect(notifier, &X11RecordingNotifier::isRedirectedChanged, this, [this, notifier]() {
@@ -100,6 +103,14 @@ PwBypass::PwBypass(QObject* parent)
             m_quitTimer->start();
         }
     });
+
+    m_sni->setTitle("Wayland to X11 Video bridge");
+    m_sni->setIconByName("video-display");
+    auto quitAction = new QAction(i18n("Quit"), this);
+    connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
+    m_sni->addAction("quitAction", quitAction);
+    m_sni->setStatus(KStatusNotifierItem::Passive);
+
     m_window->show();
 }
 
@@ -190,13 +201,6 @@ void PwBypass::init()
 
     qDBusRegisterMetaType<Stream>();
     qDBusRegisterMetaType<QVector<Stream>>();
-
-    m_sni->setTitle("Exposing application to X11");
-    m_sni->setIconByName("video-display");
-    auto closeAction = new QAction(i18n("Close"), this);
-    connect(closeAction, &QAction::triggered, this, &PwBypass::closeSession);
-    m_sni->addAction("closeAction", closeAction);
-    m_sni->setStatus(KStatusNotifierItem::Active);
 }
 
 void PwBypass::start()
@@ -218,6 +222,8 @@ void PwBypass::start()
 
 void PwBypass::handleStreams(const QVector<Stream> &streams)
 {
+    m_sni->setStatus(KStatusNotifierItem::Active);
+
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
     };
@@ -268,9 +274,12 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 
 void PwBypass::closeSession()
 {
+
     qDebug() << "close";
     m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
     m_quitTimer->stop();
+    m_sni->setStatus(KStatusNotifierItem::Passive);
+
     if (m_path.path().isEmpty())
         return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
