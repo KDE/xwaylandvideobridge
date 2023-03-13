@@ -1,7 +1,7 @@
 /*
  * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -9,12 +9,12 @@
  * accepted by the membership of KDE e.V. (or its successor approved
  * by the membership of KDE e.V.), which shall act as a proxy
  * defined in Section 14 of version 3 of the license.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,6 +33,7 @@
 #include <KStatusNotifierItem>
 
 #include <KPipeWire/pipewiresourceitem.h>
+#include "x11recordingnotifier.h"
 
 Q_DECLARE_METATYPE(Stream)
 
@@ -47,7 +48,7 @@ QDebug operator<<(QDebug debug, const Stream& stream)
 const QDBusArgument &operator<<(const QDBusArgument &argument, const Stream &/*stream*/)
 {
     argument.beginStructure();
-//     argument << stream.id << stream.opts;
+    //     argument << stream.id << stream.opts;
     argument.endStructure();
     return argument;
 }
@@ -75,49 +76,47 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, QVector<Stream> &
 PwBypass::PwBypass(QObject* parent)
     : QObject(parent)
     , iface(new OrgFreedesktopPortalScreenCastInterface(
-        QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
+                QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
     , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
+    , m_quitTimer(new QTimer(this))
     , m_window(new QQuickWindow)
     , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
-    const QVariantMap sessionParameters = {
-        { QLatin1String("session_handle_token"), m_handleToken },
-        { QLatin1String("handle_token"), m_handleToken }
-    };
-    auto sessionReply = iface->CreateSession(sessionParameters);
-    sessionReply.waitForFinished();
-    if (!sessionReply.isValid()) {
-        qWarning("Couldn't initialize the remote control session");
-        exit(1);
-        return;
-    }
+    m_quitTimer->setInterval(5000);
+    connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
 
-    const bool ret = QDBusConnection::sessionBus().connect(QString(),
-                                                           sessionReply.value().path(),
-                                                           QLatin1String("org.freedesktop.portal.Request"),
-                                                           QLatin1String("Response"),
-                                                           this,
-                                                           SLOT(response(uint, QVariantMap)));
-    if (!ret) {
-        qWarning() << "failed to create session";
-        exit(2);
-        return;
-    }
+    m_window->winId();
+    m_window->resize(100,100);
+    m_window->setTitle(i18n("Wayland to X Recording bridge"));
+    //  hide the window from rendering
+    // don't let any window manager developers see this
+//    m_window->setFlag(Qt::FramelessWindowHint); // we want this but then apps like discord ignore us :/
 
-    qDBusRegisterMetaType<Stream>();
-    qDBusRegisterMetaType<QVector<Stream>>();
+    m_window->setOpacity(100);
+    m_window->setFlag(Qt::WindowStaysOnBottomHint);
+    m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
+    m_window->setFlag(Qt::WindowTransparentForInput);
+    KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
 
-    m_sni->setTitle("Exposing application to X11");
-    m_sni->setIconByName("video-display");
-    auto closeAction = new QAction(i18n("Close"), this);
-    connect(closeAction, &QAction::triggered, this, &PwBypass::closeSession);
-    m_sni->addAction("closeAction", closeAction);
-    m_sni->setStatus(KStatusNotifierItem::Active);
+    auto notifier = new X11RecordingNotifier(m_window->winId(), this);
+
+    connect(notifier, &X11RecordingNotifier::isRedirectedChanged, this, [this, notifier]() {
+        if (notifier->isRedirected()) {
+            m_quitTimer->stop();
+            // this is a bit racey, there's a point where we wait for a reply
+            if (m_path.path().isEmpty()) {
+                init();
+            }
+        } else {
+            m_quitTimer->start();
+        }
+    });
+    m_window->show();
 }
 
 PwBypass::~PwBypass() = default;
 
-void PwBypass::init(const QDBusObjectPath& path)
+void PwBypass::startStream(const QDBusObjectPath& path)
 {
     m_path = path;
     uint32_t cursor_mode = Hidden;
@@ -162,7 +161,7 @@ void PwBypass::response(uint code, const QVariantMap& results)
 
     const auto handleIt = results.constFind(QStringLiteral("session_handle"));
     if (handleIt != results.constEnd()) {
-        init(QDBusObjectPath(handleIt->toString()));
+        startStream(QDBusObjectPath(handleIt->toString()));
         return;
     }
 
@@ -171,6 +170,44 @@ void PwBypass::response(uint code, const QVariantMap& results)
         start();
         return;
     }
+}
+
+void PwBypass::init()
+{
+    qDebug();
+    const QVariantMap sessionParameters = {
+        { QLatin1String("session_handle_token"), m_handleToken },
+        { QLatin1String("handle_token"), m_handleToken }
+    };
+    auto sessionReply = iface->CreateSession(sessionParameters);
+    sessionReply.waitForFinished();
+    if (!sessionReply.isValid()) {
+        qWarning("Couldn't initialize the remote control session");
+        exit(1);
+        return;
+    }
+
+    const bool ret = QDBusConnection::sessionBus().connect(QString(),
+                                                           sessionReply.value().path(),
+                                                           QLatin1String("org.freedesktop.portal.Request"),
+                                                           QLatin1String("Response"),
+                                                           this,
+                                                           SLOT(response(uint, QVariantMap)));
+    if (!ret) {
+        qWarning() << "failed to create session";
+        exit(2);
+        return;
+    }
+
+    qDBusRegisterMetaType<Stream>();
+    qDBusRegisterMetaType<QVector<Stream>>();
+
+    m_sni->setTitle("Exposing application to X11");
+    m_sni->setIconByName("video-display");
+    auto closeAction = new QAction(i18n("Close"), this);
+    connect(closeAction, &QAction::triggered, this, &PwBypass::closeSession);
+    m_sni->addAction("closeAction", closeAction);
+    m_sni->setStatus(KStatusNotifierItem::Active);
 }
 
 void PwBypass::start()
@@ -233,31 +270,17 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
             closeSession();
         }
     });
-
-    m_window->setTitle(i18n("Wayland to X Recording bridge"));
-
-    //  hide the window from rendering
-    // don't let any window manager developers see this
-    m_window->winId();
-    m_window->setOpacity(0);
-    m_window->lower();
-    m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
-    m_window->setFlag(Qt::WindowTransparentForInput);
-    KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
-    m_window->show();
-
-
-
 }
 
 void PwBypass::closeSession()
 {
+    qDebug() << "close";
     if (m_path.path().isEmpty())
         return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
-                                            m_path.path(),
-                                            QLatin1String("org.freedesktop.portal.Session"),
-                                            QLatin1String("Close"));
+                                                                         m_path.path(),
+                                                                         QLatin1String("org.freedesktop.portal.Session"),
+                                                                         QLatin1String("Close"));
     m_path = {};
     QDBusConnection::sessionBus().call(closeScreencastSession);
     qGuiApp->quit();

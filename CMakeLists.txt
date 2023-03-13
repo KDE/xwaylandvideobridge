@@ -24,6 +24,8 @@ find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     WidgetsAddons
 )
 
+find_package(XCB COMPONENTS REQUIRED XCB COMPOSITE RECORD XFIXES)
+
 find_package(KPipeWire REQUIRED)
 
 add_subdirectory(src)

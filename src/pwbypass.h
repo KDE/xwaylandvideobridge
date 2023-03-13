@@ -63,7 +63,8 @@ public Q_SLOTS:
     void response(uint code, const QVariantMap& results);
 
 private:
-    void init(const QDBusObjectPath &path);
+    void init();
+    void startStream(const QDBusObjectPath &path);
     void handleStreams(const QVector<Stream> &streams);
     void start();
     void closeSession();
@@ -73,6 +74,7 @@ private:
     QDBusObjectPath m_path;
     const QString m_handleToken;
 
+    QTimer *m_quitTimer;
     QScopedPointer<QQuickWindow> m_window;
     KStatusNotifierItem *m_sni;
 };
