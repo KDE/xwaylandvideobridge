@@ -54,7 +54,7 @@ static xcb_atom_t intern_atom(xcb_connection_t *c, const char *name)
 
 ContentsWindow::ContentsWindow()
 {
-    resize(100, 100);
+    resize(QSize(100, 100));
     setTitle(i18n("Wayland to X Recording bridge"));
 
     setOpacity(0);
@@ -73,8 +73,12 @@ ContentsWindow::ContentsWindow()
     handleResize();
 }
 
-void ContentsWindow::resizeEvent(QResizeEvent *event)
+void ContentsWindow::resize(const QSize &size)
 {
+    if (size.isEmpty()) {
+        return;
+    }
+    QQuickWindow::resize(size);
     handleResize();
 }
 
@@ -82,7 +86,7 @@ void ContentsWindow::handleResize()
 {
     // In theory this isn't needed - we're transparent for input, but a bug in either Xorg or kwin means
     // that it doesn't. If we forward to X it falls to the X window underneath, but kwin still "knows" theres
-    // an xwayland surface there
+    // an xwayland surface there and sends to X and not the right client
     // Solvable by either kwin checking event mask or Xserver setting a null input_region based on the event mask
 
     // but I want things now! so instead do a hack of moving things offscreen
@@ -96,9 +100,9 @@ void ContentsWindow::handleResize()
 
     // Don't let window manager devs see this
     GtkFrameExtents frame;
-    frame.top = height();
-    frame.left = width();
-    setX(-width());
+    frame.top = height() - 1;
+    frame.left = width() -1 ;
+    setX(-width() + 1); // unforutnately we still need 1px on screen to get callbacks
 
     xcb_atom_t gtk_frame_extent_atom = intern_atom(QX11Info::connection(), "_GTK_FRAME_EXTENTS");
     xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, winId(), gtk_frame_extent_atom, XCB_ATOM_CARDINAL, 32, 4, (const void *)&frame);
