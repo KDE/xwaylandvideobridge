@@ -1,6 +1,7 @@
 /*
  * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2023 David Edmundson <davidedmundson@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

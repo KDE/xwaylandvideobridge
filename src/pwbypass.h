@@ -26,7 +26,7 @@
 #include <PipeWireRecord>
 
 class QTimer;
-class QQuickWindow;
+class ContentsWindow;
 
 class KStatusNotifierItem;
 
@@ -75,6 +75,6 @@ private:
     const QString m_handleToken;
 
     QTimer *m_quitTimer;
-    QScopedPointer<QQuickWindow> m_window;
+    QScopedPointer<ContentsWindow> m_window;
     KStatusNotifierItem *m_sni;
 };

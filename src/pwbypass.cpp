@@ -1,6 +1,7 @@
 /*
  * App to render feeds coming from xdg-desktop-portal
  * Copyright 2020 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2023 David Edmundson <davidedmundson@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -26,10 +27,10 @@
 #include <QQuickWindow>
 #include <QAction>
 
+#include "contentswindow.h"
 #include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
-#include <KWindowSystem>
 #include <KStatusNotifierItem>
 
 #include <KPipeWire/pipewiresourceitem.h>
@@ -79,31 +80,18 @@ PwBypass::PwBypass(QObject* parent)
                 QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
     , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
     , m_quitTimer(new QTimer(this))
-    , m_window(new QQuickWindow)
+    , m_window(new ContentsWindow)
     , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     m_quitTimer->setInterval(5000);
     connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
-
-    m_window->winId();
-    m_window->resize(100,100);
-    m_window->setTitle(i18n("Wayland to X Recording bridge"));
-    //  hide the window from rendering
-    // don't let any window manager developers see this
-//    m_window->setFlag(Qt::FramelessWindowHint); // we want this but then apps like discord ignore us :/
-
-    m_window->setOpacity(100);
-    m_window->setFlag(Qt::WindowStaysOnBottomHint);
-    m_window->setFlag(Qt::WindowDoesNotAcceptFocus);
-    m_window->setFlag(Qt::WindowTransparentForInput);
-    KWindowSystem::setState(m_window->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     auto notifier = new X11RecordingNotifier(m_window->winId(), this);
 
     connect(notifier, &X11RecordingNotifier::isRedirectedChanged, this, [this, notifier]() {
         if (notifier->isRedirected()) {
             m_quitTimer->stop();
-            // this is a bit racey, there's a point where we wait for a reply
+            // this is a bit racey, there's a point where we wait for a reply from the portal
             if (m_path.path().isEmpty()) {
                 init();
             }
@@ -283,5 +271,4 @@ void PwBypass::closeSession()
                                                                          QLatin1String("Close"));
     m_path = {};
     QDBusConnection::sessionBus().call(closeScreencastSession);
-    qGuiApp->quit();
 }

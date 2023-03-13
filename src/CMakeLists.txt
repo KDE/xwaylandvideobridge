@@ -9,6 +9,7 @@ qt5_add_dbus_interface(
 target_sources(pwbypass PRIVATE
     main.cpp
     pwbypass.cpp
+    contentswindow.cpp
     x11recordingnotifier.cpp
     ${XDP_SRCS}
 )
@@ -20,6 +21,7 @@ target_link_libraries(pwbypass
     KF5::Notifications
     Qt5::Quick
     Qt5::DBus
+    Qt5::X11Extras
     K::KPipeWireRecord
     XCB::XCB
     XCB::COMPOSITE
