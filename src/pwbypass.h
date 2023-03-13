@@ -73,7 +73,7 @@ private:
 
     OrgFreedesktopPortalScreenCastInterface *iface;
     QDBusObjectPath m_path;
-    const QString m_handleToken;
+    QString m_handleToken;
 
     QTimer *m_quitTimer;
     QScopedPointer<ContentsWindow> m_window;

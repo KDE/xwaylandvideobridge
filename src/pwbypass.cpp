@@ -276,6 +276,7 @@ void PwBypass::closeSession()
                                                                          QLatin1String("org.freedesktop.portal.Session"),
                                                                          QLatin1String("Close"));
     m_path = {};
+    m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
     disconnect(m_pipeWireItem, nullptr, this, nullptr);
     m_pipeWireItem->deleteLater();
     m_pipeWireItem = nullptr;
