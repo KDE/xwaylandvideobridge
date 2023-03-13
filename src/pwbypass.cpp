@@ -268,6 +268,7 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
 void PwBypass::closeSession()
 {
     qDebug() << "close";
+    m_quitTimer->stop();
     if (m_path.path().isEmpty())
         return;
     QDBusMessage closeScreencastSession = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
