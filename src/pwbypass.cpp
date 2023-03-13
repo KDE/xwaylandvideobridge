@@ -236,25 +236,30 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
         exit(1);
     }
 
-    auto pipewireSource = new PipeWireSourceItem(m_window->contentItem());
-    pipewireSource->setFd(fd);
-    pipewireSource->setNodeId(streams[0].nodeId);
-    pipewireSource->setVisible(true);
+    m_pipeWireItem = new PipeWireSourceItem(m_window->contentItem());
+    m_pipeWireItem->setFd(fd);
+    m_pipeWireItem->setNodeId(streams[0].nodeId);
+    m_pipeWireItem->setVisible(true);
 
-    pipewireSource->setSize(pipewireSource->streamSize());
-    connect(pipewireSource, &PipeWireSourceItem::streamSizeChanged, this, [pipewireSource]() {
-        pipewireSource->setSize(pipewireSource->streamSize());
+    if (m_pipeWireItem->state() == PipeWireSourceItem::StreamState::Streaming) {
+        m_pipeWireItem->setSize(m_pipeWireItem->streamSize());
+        m_window->resize(m_pipeWireItem->size().toSize());
+    }
+
+    connect(m_pipeWireItem, &PipeWireSourceItem::streamSizeChanged, this, [this]() {
+        m_pipeWireItem->setSize(m_pipeWireItem->streamSize());
     });
 
-    m_window->resize(pipewireSource->size().toSize());
-    connect(pipewireSource, &QQuickItem::widthChanged, this, [this, pipewireSource]() {
-        m_window->resize(pipewireSource->size().toSize());
+
+    connect(m_pipeWireItem, &QQuickItem::widthChanged, this, [this]() {
+        m_window->resize(m_pipeWireItem->size().toSize());
     });
-    connect(pipewireSource, &QQuickItem::heightChanged, this, [this, pipewireSource]() {
-        m_window->resize(pipewireSource->size().toSize());
+    connect(m_pipeWireItem, &QQuickItem::heightChanged, this, [this]() {
+        m_window->resize(m_pipeWireItem->size().toSize());
     });
-    connect(pipewireSource, &PipeWireSourceItem::stateChanged, this, [this, pipewireSource]{
-        if (pipewireSource->state() == PipeWireSourceItem::StreamState::Unconnected) {
+
+    connect(m_pipeWireItem, &PipeWireSourceItem::stateChanged, this, [this]{
+        if (m_pipeWireItem->state() == PipeWireSourceItem::StreamState::Unconnected) {
             closeSession();
         }
     });
@@ -270,5 +275,8 @@ void PwBypass::closeSession()
                                                                          QLatin1String("org.freedesktop.portal.Session"),
                                                                          QLatin1String("Close"));
     m_path = {};
+    disconnect(m_pipeWireItem, nullptr, this, nullptr);
+    m_pipeWireItem->deleteLater();
+    m_pipeWireItem = nullptr;
     QDBusConnection::sessionBus().call(closeScreencastSession);
 }

@@ -27,6 +27,7 @@
 
 class QTimer;
 class ContentsWindow;
+class PipeWireSourceItem;
 
 class KStatusNotifierItem;
 
@@ -76,5 +77,6 @@ private:
 
     QTimer *m_quitTimer;
     QScopedPointer<ContentsWindow> m_window;
+    PipeWireSourceItem *m_pipeWireItem = nullptr;
     KStatusNotifierItem *m_sni;
 };
