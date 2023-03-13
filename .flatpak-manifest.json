@@ -14,7 +14,7 @@
             "config-opts": [ "-DENABLE_TESTING=OFF" ],
             "name": "kpipewire",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/plasma/kpipewire.git", "branch": "Plasma/5.27" } ]
+            "sources": [ { "type": "git", "url": "https://invent.kde.org/plasma/kpipewire.git", "commit": "ed99b94be40bd8c5b7b2a2f17d0622f11b2ab7fb" } ]
         },
         {
             "name": "pwbypass",
