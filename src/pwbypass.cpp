@@ -119,12 +119,11 @@ PwBypass::~PwBypass() = default;
 void PwBypass::startStream(const QDBusObjectPath& path)
 {
     m_path = path;
-    uint32_t cursor_mode = Hidden;
     const QVariantMap sourcesParameters = {
         { QLatin1String("handle_token"), m_handleToken },
         { QLatin1String("types"), iface->availableSourceTypes() },
         { QLatin1String("multiple"), false }, //for now?
-        { QLatin1String("cursor_mode"), uint(cursor_mode) }
+        { QLatin1String("cursor_mode"), uint(Metadata) }
     };
 
     auto reply = iface->SelectSources(m_path, sourcesParameters);
