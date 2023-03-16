@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop-application">
-    <id>org.kde.pwbypass.desktop</id>
+    <id>org.kde.xwaylandvideobridge.desktop</id>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-2.0-or-later</project_license>
-    <name>PipeWire By-Pass</name>
+    <name>Xwayland Video Bridge</name>
     <summary>Record the contents of your screens and windows</summary>
     <description>
-      <p>Allows you record screens and windows into a video file that can easily be shared with anyone.</p>
-
-      <p>It's meant to be a simple implementation without many features, as there's already other much more complex applications to go beyond.</p>
+      <p>Share screens and windows with X11 applications.</p>
     </description>
-    <url type="homepage">https://www.kde.org</url>
-    <url type="bugtracker">https://bugs.kde.org</url>
+    <url type="homepage">https://invent.kde.org/apol/pwbypass</url>
+    <url type="bugtracker">https://invent.kde.org/apol/pwbypass</url>
     <url type="donation">https://www.kde.org/community/donations</url>
     <provides>
         <binary>pwbypass</binary>
