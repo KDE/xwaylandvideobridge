@@ -1,5 +1,5 @@
 {
-    "id": "org.kde.pwbypass",
+    "id": "org.kde.xwaylandvideobridge",
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "5.15-22.08",
@@ -7,7 +7,7 @@
     "command": "pwbypass",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
-    "finish-args": ["--share=ipc", "--device=all", "--socket=x11", "--talk-name=org.kde.StatusNotifierWatcher",  "--own-name=org.kde.StatusNotifierItem-2-2", "--talk-name=org.freedesktop.Notifications", "--env=QT_LOGGING_DEBUG=*.debug=true qt.qpa.input*.debug=false"],
+    "finish-args": ["--share=ipc", "--device=all", "--socket=x11", "--talk-name=org.kde.StatusNotifierWatcher",  "--own-name=org.kde.StatusNotifierItem-2-2", "--env=QT_LOGGING_DEBUG=*.debug=true qt.qpa.input*.debug=false"],
 
     "modules": [
         {

@@ -28,7 +28,6 @@ target_link_libraries(pwbypass
     XCB::RECORD
 )
 
-install(FILES pwbypass.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 install(TARGETS pwbypass ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS org.kde.pwbypass.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES org.kde.pwbypass.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(PROGRAMS org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.xwaylandvideobridge.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

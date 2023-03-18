@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=PipeWire By-Pass
-GenericName=Show screens and windows in a window
+Name=Xwyaland Video Bridge
+GenericName=Share screens and windows to XWayland applications
 Icon=pwbypass
 Exec=pwbypass
 StartupNotify=false
