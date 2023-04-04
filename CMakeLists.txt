@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(pwbypass)
+project(xwaylandvideobridge)
 
 set(QT_MIN_VERSION "5.15.0")
 set(KF_MIN_VERSION "5.83.0")

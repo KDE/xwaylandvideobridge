@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pwbypass.h"
+#include "xwaylandvideobridge.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -39,23 +39,23 @@ int main(int argc, char **argv)
     qunsetenv("QT_XCB_GL_INTEGRATION");
     qunsetenv("QT_QPA_PLATFORM");
 
-    KLocalizedString::setApplicationDomain("pwbypass");
+    KLocalizedString::setApplicationDomain("xwaylandvideobridge");
     {
-        KAboutData about("pwbypass", i18n("PipeWire By-Pass"), "0.1", i18n("Utility recording what's on your screen"),
+        KAboutData about("xwaylandvideobridge", i18n("Xwayland Video Bridge"), "0.1", i18n("Offer XDG Desktop Portals screencast streams to X11 apps"),
                          KAboutLicense::GPL, i18n("(C) 2022 Aleix Pol Gonzalez"));
 
         about.addAuthor("Aleix Pol Gonzalez", i18n("Author"), "aleixpol@kde.org" );
         about.addAuthor("David Edmundson", i18n("Author"), "davidedmundson@kde.org" );
 
         KAboutData::setApplicationData(about);
-        QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("pwbypass"), app.windowIcon()));
+        QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("xwaylandvideobridge"), app.windowIcon()));
 
         QCommandLineParser parser;
         about.setupCommandLine(&parser);
         parser.process(app);
         about.processCommandLine(&parser);
 
-        new PwBypass(&app);
+        new XwaylandVideoBridge(&app);
     }
     return app.exec();
 }

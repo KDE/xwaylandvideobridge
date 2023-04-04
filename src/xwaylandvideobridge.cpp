@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pwbypass.h"
+#include "xwaylandvideobridge.h"
 #include <QGuiApplication>
 #include <QLoggingCategory>
 #include <QTimer>
@@ -74,18 +74,18 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, QVector<Stream> &
     return argument;
 }
 
-PwBypass::PwBypass(QObject* parent)
+XwaylandVideoBridge::XwaylandVideoBridge(QObject* parent)
     : QObject(parent)
     , iface(new OrgFreedesktopPortalScreenCastInterface(
                 QLatin1String("org.freedesktop.portal.Desktop"), QLatin1String("/org/freedesktop/portal/desktop"), QDBusConnection::sessionBus(), this))
-    , m_handleToken(QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate()))
+    , m_handleToken(QStringLiteral("xwaylandvideobridge%1").arg(QRandomGenerator::global()->generate()))
     , m_quitTimer(new QTimer(this))
     , m_window(new ContentsWindow)
     , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     m_quitTimer->setInterval(5000);
     m_quitTimer->setSingleShot(true);
-    connect(m_quitTimer, &QTimer::timeout, this, &PwBypass::closeSession);
+    connect(m_quitTimer, &QTimer::timeout, this, &XwaylandVideoBridge::closeSession);
 
 
 
@@ -114,9 +114,9 @@ PwBypass::PwBypass(QObject* parent)
     m_window->show();
 }
 
-PwBypass::~PwBypass() = default;
+XwaylandVideoBridge::~XwaylandVideoBridge() = default;
 
-void PwBypass::startStream(const QDBusObjectPath& path)
+void XwaylandVideoBridge::startStream(const QDBusObjectPath& path)
 {
     m_path = path;
     const QVariantMap sourcesParameters = {
@@ -137,7 +137,7 @@ void PwBypass::startStream(const QDBusObjectPath& path)
     qDebug() << "select sources done" << reply.value().path();
 }
 
-void PwBypass::response(uint code, const QVariantMap& results)
+void XwaylandVideoBridge::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
         qDebug() << "XDG session cancelled";
@@ -171,7 +171,7 @@ void PwBypass::response(uint code, const QVariantMap& results)
     }
 }
 
-void PwBypass::init()
+void XwaylandVideoBridge::init()
 {
     qDebug();
     const QVariantMap sessionParameters = {
@@ -202,13 +202,13 @@ void PwBypass::init()
     qDBusRegisterMetaType<QVector<Stream>>();
 }
 
-void PwBypass::start()
+void XwaylandVideoBridge::start()
 {
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
     };
 
-    auto reply = iface->Start(m_path, QStringLiteral("org.kde.pwbypass"), startParameters);
+    auto reply = iface->Start(m_path, QStringLiteral("org.kde.xwaylandvideobridge"), startParameters);
     reply.waitForFinished();
 
     if (reply.isError()) {
@@ -219,7 +219,7 @@ void PwBypass::start()
     qDebug() << "started!" << reply.value().path();
 }
 
-void PwBypass::handleStreams(const QVector<Stream> &streams)
+void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
 {
     m_sni->setStatus(KStatusNotifierItem::Active);
 
@@ -271,11 +271,11 @@ void PwBypass::handleStreams(const QVector<Stream> &streams)
     });
 }
 
-void PwBypass::closeSession()
+void XwaylandVideoBridge::closeSession()
 {
 
     qDebug() << "close";
-    m_handleToken = QStringLiteral("pwbypass%1").arg(QRandomGenerator::global()->generate());
+    m_handleToken = QStringLiteral("xwaylandvideobridge%1").arg(QRandomGenerator::global()->generate());
     m_quitTimer->stop();
     m_sni->setStatus(KStatusNotifierItem::Passive);
 

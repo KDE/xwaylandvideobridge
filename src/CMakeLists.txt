@@ -1,4 +1,4 @@
-add_executable(pwbypass)
+add_executable(xwaylandvideobridge)
 
 qt5_add_dbus_interface(
    XDP_SRCS
@@ -6,15 +6,15 @@ qt5_add_dbus_interface(
    xdp_dbus_screencast_interface
 )
 
-target_sources(pwbypass PRIVATE
+target_sources(xwaylandvideobridge PRIVATE
     main.cpp
-    pwbypass.cpp
+    xwaylandvideobridge.cpp
     contentswindow.cpp
     x11recordingnotifier.cpp
     ${XDP_SRCS}
 )
 
-target_link_libraries(pwbypass
+target_link_libraries(xwaylandvideobridge
     KF5::I18n
     KF5::CoreAddons
     KF5::WindowSystem
@@ -28,6 +28,6 @@ target_link_libraries(pwbypass
     XCB::RECORD
 )
 
-install(TARGETS pwbypass ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS xwaylandvideobridge ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.xwaylandvideobridge.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

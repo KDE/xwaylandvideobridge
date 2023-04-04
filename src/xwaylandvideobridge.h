@@ -38,12 +38,12 @@ struct Stream {
 
 class OrgFreedesktopPortalScreenCastInterface;
 
-class PwBypass : public QObject
+class XwaylandVideoBridge : public QObject
 {
     Q_OBJECT
 public:
-    PwBypass(QObject* parent = nullptr);
-    ~PwBypass() override;
+    XwaylandVideoBridge(QObject* parent = nullptr);
+    ~XwaylandVideoBridge() override;
 
     enum CursorModes {
         Hidden = 1,

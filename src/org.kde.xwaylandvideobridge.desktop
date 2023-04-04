@@ -2,7 +2,7 @@
 Type=Application
 Name=Xwyaland Video Bridge
 GenericName=Share screens and windows to XWayland applications
-Icon=pwbypass
-Exec=pwbypass
+Icon=xwaylandvideobridge
+Exec=xwaylandvideobridge
 StartupNotify=false
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
