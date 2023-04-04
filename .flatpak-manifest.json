@@ -4,7 +4,7 @@
     "runtime": "org.kde.Platform",
     "runtime-version": "5.15-22.08",
     "sdk": "org.kde.Sdk",
-    "command": "pwbypass",
+    "command": "xwaylandvideobridge",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
     "finish-args": ["--share=ipc", "--device=all", "--socket=x11", "--talk-name=org.kde.StatusNotifierWatcher",  "--own-name=org.kde.StatusNotifierItem-2-2", "--env=QT_LOGGING_DEBUG=*.debug=true qt.qpa.input*.debug=false"],
@@ -14,10 +14,10 @@
             "config-opts": [ "-DENABLE_TESTING=OFF" ],
             "name": "kpipewire",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/plasma/kpipewire.git", "commit": "ed99b94be40bd8c5b7b2a2f17d0622f11b2ab7fb" } ]
+            "sources": [ { "type": "git", "url": "https://invent.kde.org/plasma/kpipewire.git", "commit": "Plasma/5.27" } ]
         },
         {
-            "name": "pwbypass",
+            "name": "xwaylandvideobridge",
             "buildsystem": "cmake-ninja",
             "sources": [
                 {
