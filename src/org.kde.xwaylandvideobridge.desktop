@@ -2,6 +2,13 @@
 Type=Application
 Name=Xwayland Video Bridge
 GenericName=Share screens and windows to XWayland applications
+GenericName[ca]=Comparteix pantalles i finestres amb les aplicacions XWayland
+GenericName[ca@valencia]=Compartix pantalles i finestres amb les aplicacions XWayland
+GenericName[nl]=Schermen en vensters delen met XWayland toepassingen
+GenericName[pt]=Partilhar ecrãs e janelas com as aplicações do XWayland
+GenericName[tr]=Ekranları ve pencereleri XWayland uygulamalarına paylaş
+GenericName[uk]=Спільне користування екранами та вікнами для програм XWayland
+GenericName[x-test]=xxShare screens and windows to XWayland applicationsxx
 Icon=xwaylandvideobridge
 Exec=xwaylandvideobridge
 StartupNotify=false
