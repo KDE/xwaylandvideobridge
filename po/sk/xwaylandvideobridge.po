@@ -1,43 +1,44 @@
+# translation of xwaylandvideobridge.po to Slovak
+# Roman Paholík <wizzardsk@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:49+0000\n"
-"PO-Revision-Date: 2023-04-06 10:25+0100\n"
-"Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
-"Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
-"Language: pt\n"
+"PO-Revision-Date: 2023-04-07 08:07+0200\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-POFile-SpellExtra: Wayland Xwayland Aleix Pol Gonzalez\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "José Nuno Pires"
+msgstr "Roman Paholík"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "zepires@gmail.com"
+msgstr "wizzardsk@gmail.com"
 
 #: src/contentswindow.cpp:58
 #, kde-format
 msgid "Wayland to X Recording bridge"
-msgstr "Interface de gravação do Wayland para o X"
+msgstr ""
 
 #: src/main.cpp:44
 #, kde-format
 msgid "Xwayland Video Bridge"
-msgstr "Interface de Vídeo para o Xwayland"
+msgstr "Xwayland video most"
 
 #: src/main.cpp:44
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr ""
-"Disponibiliza transmissões do XDG Desktop Portals para as aplicações de X11"
 
 #: src/main.cpp:45
 #, kde-format
@@ -47,9 +48,9 @@ msgstr "(C) 2022 Aleix Pol Gonzalez"
 #: src/main.cpp:47 src/main.cpp:48
 #, kde-format
 msgid "Author"
-msgstr "Autoria"
+msgstr "Autor"
 
 #: src/xwaylandvideobridge.cpp:109
 #, kde-format
 msgid "Quit"
-msgstr "Sair"
+msgstr "Ukončiť"
