@@ -27,14 +27,16 @@
 #include <QQuickWindow>
 #include <QAction>
 
-#include "contentswindow.h"
-#include "xdp_dbus_screencast_interface.h"
 #include <KLocalizedString>
 #include <KFileUtils>
 #include <KStatusNotifierItem>
 
 #include <KPipeWire/pipewiresourceitem.h>
+
+#include "xdp_dbus_screencast_interface.h"
+#include "contentswindow.h"
 #include "x11recordingnotifier.h"
+#include "xwaylandvideobridge_debug.h"
 
 Q_DECLARE_METATYPE(Stream)
 
@@ -130,22 +132,22 @@ void XwaylandVideoBridge::startStream(const QDBusObjectPath& path)
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qWarning() << "Could not select sources" << reply.error();
+        qCWarning(XWAYLANDBRIDGE) << "Could not select sources" << reply.error();
         exit(1);
         return;
     }
-    qDebug() << "select sources done" << reply.value().path();
+    qCDebug(XWAYLANDBRIDGE) << "select sources done" << reply.value().path();
 }
 
 void XwaylandVideoBridge::response(uint code, const QVariantMap& results)
 {
     if (code == 1) {
-        qDebug() << "XDG session cancelled";
+        qCDebug(XWAYLANDBRIDGE) << "XDG session cancelled";
         closeSession();
         return;
     } else if (code > 0) {
-        qWarning() << "error!!!" << results << code;
-        exit(666);
+        qCWarning(XWAYLANDBRIDGE) << "XDG session failed:" << results << code;
+        exit(1);
         return;
     }
 
@@ -164,7 +166,7 @@ void XwaylandVideoBridge::response(uint code, const QVariantMap& results)
         return;
     }
 
-    qDebug() << "params" << results << code;
+    qCDebug(XWAYLANDBRIDGE) << "params" << results << code;
     if (results.isEmpty()) {
         start();
         return;
@@ -173,7 +175,6 @@ void XwaylandVideoBridge::response(uint code, const QVariantMap& results)
 
 void XwaylandVideoBridge::init()
 {
-    qDebug();
     const QVariantMap sessionParameters = {
         { QLatin1String("session_handle_token"), m_handleToken },
         { QLatin1String("handle_token"), m_handleToken }
@@ -181,7 +182,7 @@ void XwaylandVideoBridge::init()
     auto sessionReply = iface->CreateSession(sessionParameters);
     sessionReply.waitForFinished();
     if (!sessionReply.isValid()) {
-        qWarning("Couldn't initialize the remote control session");
+        qCWarning(XWAYLANDBRIDGE) << "Couldn't initialize the remote control session";
         exit(1);
         return;
     }
@@ -193,7 +194,7 @@ void XwaylandVideoBridge::init()
                                                            this,
                                                            SLOT(response(uint, QVariantMap)));
     if (!ret) {
-        qWarning() << "failed to create session";
+        qCWarning(XWAYLANDBRIDGE) << "failed to create session";
         exit(2);
         return;
     }
@@ -212,11 +213,10 @@ void XwaylandVideoBridge::start()
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qWarning() << "Could not start stream" << reply.error();
+        qCWarning(XWAYLANDBRIDGE) << "Could not start stream" << reply.error();
         exit(1);
         return;
     }
-    qDebug() << "started!" << reply.value().path();
 }
 
 void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
@@ -231,14 +231,14 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qWarning() << "Could not start stream" << reply.error();
+        qCWarning(XWAYLANDBRIDGE) << "Could not start stream" << reply.error();
         exit(1);
         return;
     }
     const int fd = reply.value().takeFileDescriptor();
 
     if (streams.count() < 1) {
-        qWarning() << "No streams available";
+        qCWarning(XWAYLANDBRIDGE) << "No streams available";
         exit(1);
     }
 
@@ -274,7 +274,6 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
 void XwaylandVideoBridge::closeSession()
 {
 
-    qDebug() << "close";
     m_handleToken = QStringLiteral("xwaylandvideobridge%1").arg(QRandomGenerator::global()->generate());
     m_quitTimer->stop();
     m_sni->setStatus(KStatusNotifierItem::Passive);

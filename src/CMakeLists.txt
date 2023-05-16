@@ -6,6 +6,9 @@ qt5_add_dbus_interface(
    xdp_dbus_screencast_interface
 )
 
+ecm_qt_declare_logging_category(XDP_SRCS HEADER xwaylandvideobridge_debug.h IDENTIFIER XWAYLANDBRIDGE CATEGORY_NAME org.kde.xwaylandvideobridge DESCRIPTION "Xwayland Video Bridge" EXPORT XWAYLANDVIDEOBRIDGE)
+ecm_qt_install_logging_categories(EXPORT XWAYLANDVIDEOBRIDGE FILE xwaylandvideobridge.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+
 target_sources(xwaylandvideobridge PRIVATE
     main.cpp
     xwaylandvideobridge.cpp
