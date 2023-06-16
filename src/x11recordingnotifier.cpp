@@ -68,7 +68,7 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
         }
     }
 
-    xcb_record_range_t range = {0};
+    xcb_record_range_t range = {};
     range.ext_requests.major.first = compositeExtensionOpCode;
     range.ext_requests.major.last = compositeExtensionOpCode;
     range.ext_requests.minor.first = XCB_COMPOSITE_REDIRECT_WINDOW;
