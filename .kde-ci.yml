@@ -10,7 +10,7 @@ Dependencies:
     'frameworks/ki18n': '@latest'
     'frameworks/kwindowsystem': '@latest'
     'frameworks/knotifications': '@latest'
-    'plasma/kpipewire': '@same'
+    'plasma/kpipewire': '@latest'
 
 Options:
   require-passing-tests-on: [ 'Linux' ]
