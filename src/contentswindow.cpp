@@ -58,7 +58,6 @@ ContentsWindow::ContentsWindow()
     setTitle(i18n("Wayland to X Recording bridge"));
 
     setOpacity(0);
-    setFlag(Qt::WindowStaysOnBottomHint);
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
     KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
