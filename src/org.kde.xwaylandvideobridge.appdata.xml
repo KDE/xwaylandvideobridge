@@ -19,6 +19,7 @@
   <name xml:lang="ka">Xwayland-ის ვიდეოხიდი</name>
   <name xml:lang="nl">Xwayland video-bridge</name>
   <name xml:lang="pt">Interface de Vídeo para o Xwayland</name>
+  <name xml:lang="pt-BR">Ponte de vídeo Xwayland</name>
   <name xml:lang="sk">Xwayland video most</name>
   <name xml:lang="sl">Xwayland Video Bridge</name>
   <name xml:lang="tr">Xwayland Video Köprüsü</name>
@@ -39,6 +40,7 @@
   <summary xml:lang="ka">X11-ის აპებისთვის XDG Desktop Portals-ის screencast ნაკადების შეთავაზება</summary>
   <summary xml:lang="nl">XDG schermfilmstreams van bureaubladportalen bieden aan X11 toepassingen</summary>
   <summary xml:lang="pt">Disponibiliza transmissões do XDG Desktop Portals para as aplicações de X11</summary>
+  <summary xml:lang="pt-BR">Oferece fluxos de screencast do XDG Desktop Portals para aplicativos X11</summary>
   <summary xml:lang="sl">Nudi portalom namizja XDG zaslonske tokove aplikacijam X11</summary>
   <summary xml:lang="tr">X11 uygulamalarına XDG Masaüstü Portalları ekran yayını akışları sun</summary>
   <summary xml:lang="uk">Надає змогу порталам стільниці XDG транслювати потоки даних до програм X11</summary>
@@ -59,6 +61,7 @@
     <p xml:lang="ka">X11-ის ბევრი აპი იყენებს X11-ის მექანიზმს სხვადასხვა მონაცემების სხვა პროგრამებისთვის გასაზიარებლად. ბოლო წლებში ჩვენ შევქმენით XDG Desktop Portals, როგორც მექანიზმი, რათა ეს ფუნქციონალი მოგვეწოდებინა და მოველით, რომ აპები მას გამოიყენებენ. ეს აპლიკაცია XDG Desktop Portals-სთვის ხელმისაწვდომ ნაკადებს თქვენს მოძველებულ X11-ის აპებს გაუზიარებს, რითიც ისინი ახალ ფუნქციონალს გამოიყენებენ.</p>
     <p xml:lang="nl">Veel X11 toepassingen zullen X11-mechanismen gebruiken om de inhoud van andere toepassen en schermen te delen. In recente jaren hebben we XDG bureaubladportalen als het mechanisme gebruikt om deze functionaliteit te leveren en het is wat we verwachten dat toepassingen het gebruiken. Deze toepassing zal de streams beschikbaar aan de XDG bureaubladportalen leveren aan uw oudere X11-toepassingen die niet aan het nieuwe systeem zijn aangepast.</p>
     <p xml:lang="pt">Muitas das aplicações do X11 irão usar mecanismos do X11 para partilhar os conteúdos de outras aplicações e ecrãs. Recentemente, criámos o XDG Desktop Portals como mecanismo para oferecer esta funcionalidade, e é o que esperamos que as aplicações comecem a usar. Esta aplicação irá fornecer as transmissões disponíveis do XDG Desktop Portals às suas aplicações antigas do X11 que ainda não tenham adoptado o novo sistema.</p>
+    <p xml:lang="pt-BR">Muitos aplicativos X11 usarão mecanismos X11 para compartilhar o conteúdo de outros aplicativos e telas. Nos últimos anos, criamos o XDG Desktop Portals como o mecanismo para fornecer essa funcionalidade e é o que esperamos que os aplicativos usem. Este aplicativo fornecerá os fluxos disponíveis do XDG Desktop Portals para seus aplicativos X11 antigos que não adotaram o novo sistema.</p>
     <p xml:lang="sl">Številne aplikacije X11 bodo uporabljale mehanizme X11 za skupno rabo vsebin drugih aplikacij in prikazov. V zadnjih letih smo ustvarili portale namizja XDG Portali kot mehanizem za zagotavljanje te funkcionalnosti in pričakujemo, da ga bodo aplikacije tudi uporabljale. Ta aplikacija bo zagotovila tokove na voljo na portalih namizja  XDG za vaše podedovane aplikacije X11, ki se še niso prilagodile na novi sistem.</p>
     <p xml:lang="tr">Birçok X11 uygulaması, diğer uygulamaların ve ekranların içeriklerini paylaşmak için X11 mekanizmalarını kullanır. Son yıllarda, bu işlevselliği sağlamak için mekanizma olarak XDG Masaüstü Portalları'nı oluşturduk ve uygulamaların bunu kullanmasını bekliyoruz. Bu uygulama, XDG Masaüstü Portalları'nda var olan akışları, yeni sistemi benimsememiş eski X11 uygulamalarınıza sağlayacaktır.</p>
     <p xml:lang="uk">Багато програм X11 використовують механізми X11 для оприлюднення даних інших програм та дисплеїв. Протягом останніх років ми створили портали стільниць XDG як механізм надання цих функціональних можливостей, і саме ними мають користуватися програми. Ця програма надає доступ до потоків даних порталів XDG ваших застарілим програмам X11, які не адаптовано до нової системи.</p>
