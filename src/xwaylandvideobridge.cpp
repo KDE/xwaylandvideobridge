@@ -31,7 +31,11 @@
 #include <KFileUtils>
 #include <KStatusNotifierItem>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <PipeWireSourceItem>
+#else
 #include <KPipeWire/pipewiresourceitem.h>
+#endif
 
 #include "xdp_dbus_screencast_interface.h"
 #include "contentswindow.h"

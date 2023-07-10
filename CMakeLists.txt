@@ -15,9 +15,21 @@ include(ECMInstallIcons)
 include(ECMQtDeclareLoggingCategory)
 include(FeatureSummary)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus X11Extras)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(REQUIRED_QT_VERSION "6.4")
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
+endif()
 
-find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS
+
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus)
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(Qt5X11Extras ${QT_MIN_VERSION} REQUIRED)
+endif()
+
+find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     CoreAddons
     I18n
     WindowSystem

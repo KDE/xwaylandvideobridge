@@ -2,14 +2,24 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['@all']
+- 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
   'require':
-    'frameworks/extra-cmake-modules': '@latest'
-    'frameworks/kcoreaddons': '@latest'
-    'frameworks/kwidgetsaddons': '@latest'
-    'frameworks/ki18n': '@latest'
-    'frameworks/kwindowsystem': '@latest'
-    'frameworks/knotifications': '@latest'
+    'frameworks/extra-cmake-modules': '@latest-kf6'
+    'frameworks/kcoreaddons': '@latest-kf6'
+    'frameworks/kwidgetsaddons': '@latest-kf6'
+    'frameworks/ki18n': '@latest-kf6'
+    'frameworks/kwindowsystem': '@latest-kf6'
+    'frameworks/knotifications': '@latest-kf6'
+    'plasma/kpipewire': '@latest-kf6'
+
+- 'on': ['Linux/Qt5', 'FreeBSD/Qt5']
+  'require':
+    'frameworks/extra-cmake-modules': '@stable'
+    'frameworks/kcoreaddons': '@stable'
+    'frameworks/kwidgetsaddons': '@stable'
+    'frameworks/ki18n': '@stable'
+    'frameworks/kwindowsystem': '@stable'
+    'frameworks/knotifications': '@stable'
     'plasma/kpipewire': '@latest'
 
 Options:
