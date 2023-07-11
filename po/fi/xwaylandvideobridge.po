@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-18 00:50+0000\n"
+"POT-Creation-Date: 2023-07-11 00:49+0000\n"
 "PO-Revision-Date: 2023-05-08 13:50+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -27,7 +27,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "translator@legisign.org"
 
-#: src/contentswindow.cpp:58
+#: src/contentswindow.cpp:62
 #, kde-format
 msgid "Wayland to X Recording bridge"
 msgstr "Waylandistä X:ään -talletussilta"
@@ -52,7 +52,7 @@ msgstr "© 2022 Aleix Pol Gonzalez"
 msgid "Author"
 msgstr "Tekijä"
 
-#: src/xwaylandvideobridge.cpp:111
+#: src/xwaylandvideobridge.cpp:115
 #, kde-format
 msgid "Quit"
 msgstr "Lopeta"

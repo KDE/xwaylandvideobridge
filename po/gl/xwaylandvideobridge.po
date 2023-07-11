@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-18 00:50+0000\n"
+"POT-Creation-Date: 2023-07-11 00:49+0000\n"
 "PO-Revision-Date: 2023-04-30 10:45+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -27,7 +27,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "adrian@chaves.io"
 
-#: src/contentswindow.cpp:58
+#: src/contentswindow.cpp:62
 #, kde-format
 msgid "Wayland to X Recording bridge"
 msgstr "Ponte de gravación de Wayland a X"
@@ -54,7 +54,7 @@ msgstr "© 2022 Aleix Pol González"
 msgid "Author"
 msgstr "Autor"
 
-#: src/xwaylandvideobridge.cpp:111
+#: src/xwaylandvideobridge.cpp:115
 #, kde-format
 msgid "Quit"
 msgstr "Saír"
