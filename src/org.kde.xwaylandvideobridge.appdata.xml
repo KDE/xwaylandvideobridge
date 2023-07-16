@@ -10,6 +10,7 @@
   <name xml:lang="cs">Propojení videa Xwayland</name>
   <name xml:lang="de">Xwayland-Video-Brücke</name>
   <name xml:lang="en-GB">Xwayland Video Bridge</name>
+  <name xml:lang="eo">Xwayland Video-Ponto</name>
   <name xml:lang="es">Pasarela de vídeo Xwayland</name>
   <name xml:lang="eu">Xwayland bideo zubia</name>
   <name xml:lang="fi">Xwayland-videosilta</name>
@@ -31,6 +32,7 @@
   <summary xml:lang="ca">Ofereix fluxos de vídeo de captura de pantalla dels «XDG Desktop Portals» a les aplicacions X11</summary>
   <summary xml:lang="ca-valencia">Oferix fluxos de vídeo de captura de pantalla dels «XDG Desktop Portals» a les aplicacions X11</summary>
   <summary xml:lang="en-GB">Offer XDG Desktop Portals screencast streams to X11 apps</summary>
+  <summary xml:lang="eo">Oferti "XDG Desktop Portals" ekranregistraĵajn fluojn al X11-aplikoj</summary>
   <summary xml:lang="es">Ofrecer emisiones de vídeo de los portales de escritorio XDG a las aplicaciones de X11</summary>
   <summary xml:lang="eu">Eskaini XDG mahaigain atarien pantaila-grabazio korronteak X11 aplikazioei</summary>
   <summary xml:lang="fi">Tarjoa XDG-työpöytäportaalin näytöntoistovirtoja X11-sovelluksiin</summary>
@@ -52,6 +54,7 @@
     <p xml:lang="ca">Moltes aplicacions X11 estaran utilitzant els mecanismes X11 per a compartir el contingut d'altres aplicacions i pantalles. En els darrers anys hem creat els «XDG Desktop Portals» com un mecanisme de proporcionar aquesta funcionalitat i és el que esperem que les aplicacions facin servir. Aquesta aplicació proporcionarà els fluxos disponibles per als «XDG Desktop Portals» a les vostres aplicacions X11 antigues que encara no hagin adoptat el sistema nou.</p>
     <p xml:lang="ca-valencia">Moltes aplicacions X11 estaran utilitzant els mecanismes X11 per a compartir el contingut d'altres aplicacions i pantalles. En els darrers anys hem creat els «XDG Desktop Portals» com un mecanisme de proporcionar esta característica i és el que esperem que les aplicacions facen servir. Esta aplicació proporcionarà els fluxos disponibles per als «XDG Desktop Portals» a les vostres aplicacions X11 antigues que encara no hagen adoptat el sistema nou.</p>
     <p xml:lang="en-GB">Many X11 apps will be using X11 mechanisms to share the contents of other applications and displays. In recent years we have created XDG Desktop Portals as the mechanism to provide this functionality and it's what we expect apps to be using it. This application will provide the streams available to the XDG Desktop Portals to your legacy X11 apps that have not adopted the new system.</p>
+    <p xml:lang="eo">Multaj X11-aplikoj uzos X11-mekanismojn por kunhavigi la enhavon de aliaj aplikaĵoj kaj ekranoj. En la lastaj jaroj ni kreis XDG Desktop Portals kiel la mekanismon por provizi ĉi tiun funkcion kaj estas tio, kion ni atendas, ke aplikaĵoj uzu. Ĉi tiu aplikaĵo provizos la fluojn disponeblajn al la XDG-Labortablaj Portaloj al viaj heredaĵaj X11-aplikoj, kiuj ne adoptis la novan sistemon.</p>
     <p xml:lang="es">Muchas aplicaciones de X11 usarán mecanismos de X11 para compartir el contenido de otras aplicaciones y pantallas. En los últimos años, hemos creado los portales de escritorio XDG como el mecanismo para proporcionar esta funcionalidad y es lo que esperamos que usen las aplicaciones. Esta aplicación proporcionará las transmisiones disponibles para los portales de escritorio XDG a las aplicaciones X11 heredadas que no han adoptado el nuevo sistema.</p>
     <p xml:lang="eu">X11 aplikazio askok X11 mekanismoak erabiliko dituzte beste aplikazio eta bistaratzaile batzuen edukia partekatzeko. Azken urteetan XDG mahaigaineko atariak sortu ditugu funtzionalitate hori emateko mekanismo gisa, eta espero dugu aplikazioek haiek erabiltzea. Aplikazio horrek XDG mahaigaineko atarietarako eskuragarri dauden korronteak emango dizkie sistema berria hartu ez duten X11 ondare aplikazioei.</p>
     <p xml:lang="fi">Monet X11-sovellukset käyttävät X11-mekanismeja sisältönsä jakamiseksi toisiin sovelluksiin ja toisille näytöille. Toiminnallisuutta tarjoamaan on viime vuosina luotu XDG-työpöytäportaali, jota sovellusten odotetaan käytettävän. Tämä sovellus tarjoaa XDG-työpöytäportaalissa saatavilla oleva virrat vanhoille, X11-sovelluksille, jotka eivät ole ottaneet käyttöön uutta järjestelmää.</p>
