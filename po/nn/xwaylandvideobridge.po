@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-11 00:49+0000\n"
-"PO-Revision-Date: 2023-07-29 12:15+0200\n"
+"PO-Revision-Date: 2023-07-31 21:11+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -42,7 +42,7 @@ msgstr "Xwayland-videobru"
 #: src/main.cpp:44
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
-msgstr ""
+msgstr "Tilbyr XDG Desktop Portals-skjermkastings­straumar til X11-program"
 
 #: src/main.cpp:45
 #, kde-format
