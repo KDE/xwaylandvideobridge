@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-11 00:49+0000\n"
-"PO-Revision-Date: 2023-07-31 21:11+0200\n"
+"PO-Revision-Date: 2023-08-01 21:40+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -32,7 +32,7 @@ msgstr "karl@huftis.org"
 #: src/contentswindow.cpp:62
 #, kde-format
 msgid "Wayland to X Recording bridge"
-msgstr ""
+msgstr "Opptaksbru for Wayland til X"
 
 #: src/main.cpp:44
 #, kde-format
