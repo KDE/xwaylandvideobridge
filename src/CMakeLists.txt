@@ -24,6 +24,7 @@ target_link_libraries(xwaylandvideobridge
     KF${QT_MAJOR_VERSION}::Notifications
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::DBus
+    Qt${QT_MAJOR_VERSION}::Widgets
     K::KPipeWireRecord
     XCB::XCB
     XCB::COMPOSITE
