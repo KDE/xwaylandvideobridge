@@ -10,6 +10,7 @@ Dependencies:
     'frameworks/ki18n': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
     'frameworks/knotifications': '@latest-kf6'
+    'frameworks/kstatusnotifieritem': '@latest-kf6'
     'plasma/kpipewire': '@latest-kf6'
 
 - 'on': ['Linux/Qt5', 'FreeBSD/Qt5']

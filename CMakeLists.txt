@@ -37,6 +37,10 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     WidgetsAddons
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} REQUIRED)
+endif()
+
 find_package(XCB COMPONENTS REQUIRED XCB COMPOSITE RECORD XFIXES)
 
 find_package(KPipeWire REQUIRED)
