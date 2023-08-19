@@ -34,7 +34,6 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     I18n
     WindowSystem
     Notifications
-    WidgetsAddons
 )
 
 if (QT_MAJOR_VERSION STREQUAL "6")

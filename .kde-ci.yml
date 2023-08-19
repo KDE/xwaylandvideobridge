@@ -6,7 +6,6 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kcoreaddons': '@latest-kf6'
-    'frameworks/kwidgetsaddons': '@latest-kf6'
     'frameworks/ki18n': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
     'frameworks/knotifications': '@latest-kf6'
@@ -17,7 +16,6 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@stable'
     'frameworks/kcoreaddons': '@stable'
-    'frameworks/kwidgetsaddons': '@stable'
     'frameworks/ki18n': '@stable'
     'frameworks/kwindowsystem': '@stable'
     'frameworks/knotifications': '@stable'
