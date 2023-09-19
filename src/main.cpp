@@ -32,12 +32,11 @@ int main(int argc, char **argv)
 {
     qputenv("QT_QPA_PLATFORM", "xcb");
     qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+
     qputenv("QT_QPA_UPDATE_IDLE_TIME", 0);
     qputenv("QSG_RENDER_LOOP", "basic");
     QApplication app(argc, argv); // widgets are needed just for the SNI.
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
-    qunsetenv("QT_XCB_GL_INTEGRATION");
-    qunsetenv("QT_QPA_PLATFORM");
 
     KLocalizedString::setApplicationDomain("xwaylandvideobridge");
     {
