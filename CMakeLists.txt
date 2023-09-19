@@ -15,6 +15,9 @@ include(ECMInstallIcons)
 include(ECMQtDeclareLoggingCategory)
 include(FeatureSummary)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if (QT_MAJOR_VERSION STREQUAL "6")
     set(REQUIRED_QT_VERSION "6.4")
     set(KF_MIN_VERSION "5.240.0")
