@@ -125,11 +125,22 @@ XwaylandVideoBridge::~XwaylandVideoBridge() = default;
 void XwaylandVideoBridge::startStream(const QDBusObjectPath& path)
 {
     m_path = path;
+
+    CursorModes availableCursorModes = static_cast<CursorModes>(iface->availableCursorModes());
+    CursorMode cursorMode = CursorMode::Hidden;
+    if (availableCursorModes.testFlag(CursorMode::Metadata)) {
+        cursorMode = CursorMode::Metadata;
+    } else if (availableCursorModes.testFlag(CursorMode::Embedded)) {
+        cursorMode = CursorMode::Embedded;
+    } else {
+        qCWarning(XWAYLANDBRIDGE) << "Portal does not support any cursor modes. Cursors will be hidden";
+    }
+
     const QVariantMap sourcesParameters = {
         { QLatin1String("handle_token"), m_handleToken },
         { QLatin1String("types"), iface->availableSourceTypes() },
         { QLatin1String("multiple"), false }, //for now?
-        { QLatin1String("cursor_mode"), uint(Metadata) }
+        { QLatin1String("cursor_mode"), static_cast<uint>(cursorMode) }
     };
 
     auto reply = iface->SelectSources(m_path, sourcesParameters);
