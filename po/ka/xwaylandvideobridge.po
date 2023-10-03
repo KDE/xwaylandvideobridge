@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-11 00:49+0000\n"
+"POT-Creation-Date: 2023-10-03 00:44+0000\n"
 "PO-Revision-Date: 2023-04-07 05:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -33,23 +33,23 @@ msgstr "Temuri.doghonadze@gmail.com"
 msgid "Wayland to X Recording bridge"
 msgstr "Wayland-დან X-მდე ჩაწერის ხიდი"
 
-#: src/main.cpp:44
+#: src/main.cpp:43
 #, kde-format
 msgid "Xwayland Video Bridge"
 msgstr "Xwayland-ის ვიდეოხიდი"
 
-#: src/main.cpp:44
+#: src/main.cpp:43
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr ""
 "X11-ის აპებისთვის XDG Desktop Portals-ის screencast ნაკადების შეთავაზება"
 
-#: src/main.cpp:45
+#: src/main.cpp:44
 #, kde-format
 msgid "(C) 2022 Aleix Pol Gonzalez"
 msgstr "(C) 2022 Aleix Pol Gonzalez"
 
-#: src/main.cpp:47 src/main.cpp:48
+#: src/main.cpp:46 src/main.cpp:47
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
