@@ -2,7 +2,7 @@
 
 # About
 
-By design, X11 applications can't access window or screen contents for wayland clients. This is fine in princple, but it breaks screen sharing in tools like Discord, MS Teams, Skype, etc and more.
+By design, X11 applications can't access window or screen contents for wayland clients. This is fine in principle, but it breaks screen sharing in tools like Discord, MS Teams, Skype, etc and more.
 
 This tool allows us to share specific windows to X11 clients, but within the control of the user at all times.
 
