@@ -126,7 +126,7 @@ void XwaylandVideoBridge::startStream(const QDBusObjectPath& path)
 {
     m_path = path;
 
-    CursorModes availableCursorModes = CursorModes::fromInt(iface->availableCursorModes());
+    CursorModes availableCursorModes = static_cast<CursorModes>(iface->availableCursorModes());
     CursorMode cursorMode = CursorMode::Hidden;
     if (availableCursorModes.testFlag(CursorMode::Metadata)) {
         cursorMode = CursorMode::Metadata;
