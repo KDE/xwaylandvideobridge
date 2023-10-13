@@ -22,6 +22,7 @@
 
 #include <KLocalizedString>
 #include <KWindowSystem>
+#include <KX11Extras>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <private/qtx11extras_p.h>
@@ -64,7 +65,11 @@ ContentsWindow::ContentsWindow()
     setOpacity(0);
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+#else
     KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+#endif
 
     // remove decoration. We can't use the Qt helper as we need our window type to remain something
     // that keeps us valid for streams
