@@ -21,6 +21,7 @@
   <name xml:lang="ko">Xwayland 비디오 브리지</name>
   <name xml:lang="nl">Xwayland video-bridge</name>
   <name xml:lang="nn">Xwayland-videobru</name>
+  <name xml:lang="pl">Mostek obrazu Xwayland</name>
   <name xml:lang="pt">Interface de Vídeo para o Xwayland</name>
   <name xml:lang="pt-BR">Ponte de vídeo Xwayland</name>
   <name xml:lang="sk">Xwayland video most</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="ko">XDG 데스크톱 포털에 X11 앱으로 스크린캐스트 제공</summary>
   <summary xml:lang="nl">XDG schermfilmstreams van bureaubladportalen bieden aan X11 toepassingen</summary>
   <summary xml:lang="nn">Tilbyr XDG Desktop Portals-skjermkastings­straumar til X11-program</summary>
+  <summary xml:lang="pl">Daj strumienie Portali Pulpitu XDG aplikacjom X11</summary>
   <summary xml:lang="pt">Disponibiliza transmissões do XDG Desktop Portals para as aplicações de X11</summary>
   <summary xml:lang="pt-BR">Oferece fluxos de screencast do XDG Desktop Portals para aplicativos X11</summary>
   <summary xml:lang="sl">Nudi portalom namizja XDG zaslonske tokove aplikacijam X11</summary>
@@ -68,6 +70,7 @@
     <p xml:lang="ka">X11-ის ბევრი აპი იყენებს X11-ის მექანიზმს სხვადასხვა მონაცემების სხვა პროგრამებისთვის გასაზიარებლად. ბოლო წლებში ჩვენ შევქმენით XDG Desktop Portals, როგორც მექანიზმი, რათა ეს ფუნქციონალი მოგვეწოდებინა და მოველით, რომ აპები მას გამოიყენებენ. ეს აპლიკაცია XDG Desktop Portals-სთვის ხელმისაწვდომ ნაკადებს თქვენს მოძველებულ X11-ის აპებს, რომლებსაც ახალი სისტემის მხარდაჭერა ჯერ გააჩნიათ, გაუზიარებს.</p>
     <p xml:lang="ko">여러 X11 앱에서는 다른 앱과 디스플레이의 내용을 공유할 때 X11 메커니즘을 사용합니다. 최근에는 XDG 데스크톱 포털에 화면 공유 기능이 추가되었고, 장기적으로 이 기능을 사용할 것을 예상하고 있습니다. 이 앱에서는 XDG 데스크톱 포털에서 제공하는 스트림을 포털을 사용하지 않는 레거시 X11 앱으로 전달합니다.</p>
     <p xml:lang="nl">Veel X11 toepassingen zullen X11-mechanismen gebruiken om de inhoud van andere toepassen en schermen te delen. In recente jaren hebben we XDG bureaubladportalen als het mechanisme gebruikt om deze functionaliteit te leveren en het is wat we verwachten dat toepassingen gebruiken. Deze toepassing zal de streams beschikbaar aan de XDG bureaubladportalen leveren aan uw oudere X11-toepassingen die niet aan het nieuwe systeem zijn aangepast.</p>
+    <p xml:lang="pl">Wiele aplikacji X11 będzie używać mechanizmów X11 do współdzielenia treści z innymi aplikacjami i wyświetlaczami. W ostatnich latach stworzyliśmy Portale Pulpitów XDG jako mechanizm do zapewnienia tej możliwości i oczekujemy, że właśnie tego będą używać aplikacji. Ta aplikacja dostarczy strumienie dostępne Portalom Pulpitów XDG twoim przestarzałym aplikacjom X11, które nie przeszły na nowy system.</p>
     <p xml:lang="pt-BR">Muitos aplicativos X11 usarão mecanismos X11 para compartilhar o conteúdo de outros aplicativos e telas. Nos últimos anos, criamos o XDG Desktop Portals como o mecanismo para fornecer essa funcionalidade e é o que esperamos que os aplicativos usem. Este aplicativo fornecerá os fluxos disponíveis do XDG Desktop Portals para seus aplicativos X11 antigos que não adotaram o novo sistema.</p>
     <p xml:lang="sl">Številne aplikacije X11 bodo uporabljale mehanizme X11 za skupno rabo vsebin drugih aplikacij in prikazov. V zadnjih letih smo ustvarili portale namizja XDG Portali kot mehanizem za zagotavljanje te funkcionalnosti in pričakujemo, da ga bodo aplikacije tudi uporabljale. Ta aplikacija bo zagotovila tokove na voljo na portalih namizja XDG za vaše podedovane aplikacije X11, ki se še niso prilagodile na novi sistem.</p>
     <p xml:lang="sv">Många X11-program använder X11-mekanismer för att dela innehåll från andra program och skärmar. Under de senaste åren har vi skapat XDG-skrivbordsportaler som mekanismen för att tillhandahålla den funktionaliteten och det är vad vi förväntar oss att program ska använda. Det här programmet tillhandahåller de strömmar som är tillgängliga för XDG-skrivbordsportaler till äldre X11-program som inte har antagit det nya systemet.</p>
