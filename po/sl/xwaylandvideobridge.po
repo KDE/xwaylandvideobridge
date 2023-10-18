@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:44+0000\n"
+"POT-Creation-Date: 2023-10-18 00:44+0000\n"
 "PO-Revision-Date: 2023-04-07 08:03+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -28,7 +28,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "matjaz.jeran@amis.net"
 
-#: src/contentswindow.cpp:62
+#: src/contentswindow.cpp:63
 #, kde-format
 msgid "Wayland to X Recording bridge"
 msgstr "Premostitev snemalnika Wayland na X"

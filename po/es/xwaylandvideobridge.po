@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-03 00:44+0000\n"
+"POT-Creation-Date: 2023-10-18 00:44+0000\n"
 "PO-Revision-Date: 2023-04-08 00:13+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -29,7 +29,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "ecuadra@eloihr.net"
 
-#: src/contentswindow.cpp:62
+#: src/contentswindow.cpp:63
 #, kde-format
 msgid "Wayland to X Recording bridge"
 msgstr "Pasarela de grabación de Wayland a X"
