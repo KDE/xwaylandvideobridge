@@ -16,7 +16,7 @@ public:
 Q_SIGNALS:
     void isRedirectedChanged();
 private:
-    void handleNewRecord(xcb_record_enable_context_reply_t *reply);
+    void handleNewRecord(xcb_record_enable_context_reply_t &reply);
 
     xcb_connection_t *m_connection = nullptr;
     xcb_record_context_t m_recordingContext = 0;

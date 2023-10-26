@@ -20,8 +20,8 @@
 
 #include "x11recordingnotifier.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
 #include <xcb/composite.h>
@@ -29,12 +29,28 @@
 #include <xcb/xcbext.h>
 
 #include <xcb/record.h>
-#include <string.h>
+#include <cstring>
 
 #include <QScopedPointer>
 #include <QDebug>
 #include <QSocketNotifier>
 #include <QScopeGuard>
+
+struct XCBResponse
+{
+    ~XCBResponse();
+    
+    xcb_record_enable_context_reply_t *reply = nullptr;
+    xcb_generic_error_t *error = nullptr;
+};
+
+XCBResponse::~XCBResponse() {
+    std::free(this->reply);
+    std::free(this->error);
+
+    this->reply = nullptr;
+    this->error = nullptr;
+}
 
 X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
     : QObject(parent)
@@ -42,7 +58,7 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
 {
     // we use a separate connection as the X11 recording API blocks is super weird
     // and we get multiple replies to a request rather than events
-    m_connection = xcb_connect(NULL, NULL);
+    m_connection = xcb_connect(nullptr, nullptr);
     auto c = m_connection;
     xcb_generic_error_t *error;
 
@@ -54,7 +70,7 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
     int compositeExtensionOpCode = -1;
     {
         xcb_query_extension_cookie_t cookie = xcb_query_extension(c, strlen("Composite"), "Composite");
-        QScopedPointer<xcb_query_extension_reply_t, QScopedPointerPodDeleter> reply(xcb_query_extension_reply(c, cookie, NULL));
+        QScopedPointer<xcb_query_extension_reply_t, QScopedPointerPodDeleter> reply(xcb_query_extension_reply(c, cookie, nullptr));
         compositeExtensionOpCode = reply->major_opcode;
     }
 
@@ -88,31 +104,30 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
 
     auto notifier = new QSocketNotifier(xcb_get_file_descriptor(c), QSocketNotifier::Read, this);
     connect(notifier, &QSocketNotifier::activated, this, [this, enableCookie] {
-        xcb_generic_event_t *event;
+        xcb_generic_event_t *event = nullptr;
         auto c = m_connection;
         while ((event = xcb_poll_for_event(m_connection))) {
             std::free(event);
         }
-        xcb_record_enable_context_reply_t *reply = nullptr;
-        xcb_generic_error_t *error = nullptr;
-        while (enableCookie && xcb_poll_for_reply(c, enableCookie, (void **)&reply, &error)) {
+
+        XCBResponse record;
+        while (enableCookie && xcb_poll_for_reply(c, enableCookie, (void **)&record.reply, &record.error)) {
             // xcb_poll_for_reply may set both reply and error to null if connection has error.
             // break if xcb_connection has error, no point to continue anyway.
             if (xcb_connection_has_error(c)) {
                 break;
             }
 
-            if (error) {
-                std::free(error);
+            if (record.error) {
                 break;
             }
 
-            if (!reply) {
+            if (!record.reply) {
                 continue;
             }
 
-            handleNewRecord(reply);
-            std::free(reply);
+            handleNewRecord(*record.reply);
+            record = XCBResponse();
         }
     });
 }
@@ -132,7 +147,7 @@ bool X11RecordingNotifier::isRedirected() const
     return !m_redirectionCount.isEmpty();
 }
 
-void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t *reply)
+void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &reply)
 {
     const bool wasRedirected = isRedirected();
     auto cleanup = qScopeGuard([wasRedirected, this] {
@@ -141,16 +156,16 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t *re
         }
     });
 
-    if (reply->category == 3) {
-        m_redirectionCount.remove(reply->xid_base);
+    if (reply.category == 3) {
+        m_redirectionCount.remove(reply.xid_base);
         return;
     }
 
-    if (reply->category != 1) {
+    if (reply.category != 1) {
         return;
     }
 
-    xcb_composite_redirect_window_request_t *request = reinterpret_cast<xcb_composite_redirect_window_request_t *>(xcb_record_enable_context_data(reply));
+    xcb_composite_redirect_window_request_t *request = reinterpret_cast<xcb_composite_redirect_window_request_t *>(xcb_record_enable_context_data(&reply));
 
     if (!request) {
         return;
@@ -160,7 +175,7 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t *re
         return;
     }
 
-    uint32_t caller = reply->xid_base;
+    uint32_t caller = reply.xid_base;
     switch(request->minor_opcode) {
     case XCB_COMPOSITE_REDIRECT_WINDOW:
     case XCB_COMPOSITE_REDIRECT_SUBWINDOWS:
