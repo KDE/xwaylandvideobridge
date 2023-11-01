@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
+# SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+
 cmake_minimum_required(VERSION 3.16)
 
 project(xwaylandvideobridge)

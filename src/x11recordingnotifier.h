@@ -1,3 +1,9 @@
+/*
+ * SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
+ * SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
+ * SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+ */
+
 #pragma once
 
 #include <QHash>
