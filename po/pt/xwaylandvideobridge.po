@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 00:44+0000\n"
+"POT-Creation-Date: 2023-11-02 00:44+0000\n"
 "PO-Revision-Date: 2023-04-06 10:25+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -24,33 +24,33 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "zepires@gmail.com"
 
-#: src/contentswindow.cpp:63
+#: src/contentswindow.cpp:51
 #, kde-format
 msgid "Wayland to X Recording bridge"
 msgstr "Interface de gravação do Wayland para o X"
 
-#: src/main.cpp:43
+#: src/main.cpp:29
 #, kde-format
 msgid "Xwayland Video Bridge"
 msgstr "Interface de Vídeo para o Xwayland"
 
-#: src/main.cpp:43
+#: src/main.cpp:29
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr ""
 "Disponibiliza transmissões do XDG Desktop Portals para as aplicações de X11"
 
-#: src/main.cpp:44
+#: src/main.cpp:30
 #, kde-format
 msgid "(C) 2022 Aleix Pol Gonzalez"
 msgstr "(C) 2022 Aleix Pol Gonzalez"
 
-#: src/main.cpp:46 src/main.cpp:47
+#: src/main.cpp:32 src/main.cpp:33
 #, kde-format
 msgid "Author"
 msgstr "Autoria"
 
-#: src/xwaylandvideobridge.cpp:115
+#: src/xwaylandvideobridge.cpp:101
 #, kde-format
 msgid "Quit"
 msgstr "Sair"
