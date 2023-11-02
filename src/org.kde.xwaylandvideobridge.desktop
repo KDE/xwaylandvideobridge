@@ -1,6 +1,6 @@
 [Desktop Entry]
 X-KDE-StartupNotify=false
-X-KDE-autostart-phase=1
+X-KDE-autostart-phase=2
 X-GNOME-Autostart-enabled=true
 NoDisplay=true
 

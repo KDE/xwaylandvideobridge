@@ -42,5 +42,6 @@ elseif (QT_MAJOR_VERSION STREQUAL "5")
 endif()
 
 install(TARGETS xwaylandvideobridge ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(PROGRAMS org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
 install(FILES org.kde.xwaylandvideobridge.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
