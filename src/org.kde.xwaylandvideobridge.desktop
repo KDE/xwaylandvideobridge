@@ -1,4 +1,9 @@
 [Desktop Entry]
+X-KDE-StartupNotify=false
+X-KDE-autostart-phase=1
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+
 Type=Application
 Name=Xwayland Video Bridge
 Name[ca]=Pont de vídeo de l'Xwayland
