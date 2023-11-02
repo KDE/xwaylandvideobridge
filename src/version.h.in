@@ -1,0 +1,14 @@
+/*
+ *   SPDX-FileCopyrightText: 2023 Jonathan Riddell <jr@jriddell.org>
+ *
+ *   SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
+ */
+
+#ifndef VERSION_H
+#define VERSION_H
+
+#include <QLatin1String>
+
+static QLatin1String version("@PROJECT_VERSION@");
+
+#endif

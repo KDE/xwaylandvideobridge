@@ -21,6 +21,8 @@ target_sources(xwaylandvideobridge PRIVATE
     ${XDP_SRCS}
 )
 
+configure_file(version.h.in version.h)
+
 target_link_libraries(xwaylandvideobridge
     KF${QT_MAJOR_VERSION}::I18n
     KF${QT_MAJOR_VERSION}::CoreAddons

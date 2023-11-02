@@ -7,6 +7,7 @@
  */
 
 #include "xwaylandvideobridge.h"
+#include "version.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -26,7 +27,7 @@ int main(int argc, char **argv)
 
     KLocalizedString::setApplicationDomain("xwaylandvideobridge");
     {
-        KAboutData about("xwaylandvideobridge", i18n("Xwayland Video Bridge"), "0.1", i18n("Offer XDG Desktop Portals screencast streams to X11 apps"),
+        KAboutData about("xwaylandvideobridge", i18n("Xwayland Video Bridge"), version, i18n("Offer XDG Desktop Portals screencast streams to X11 apps"),
                          KAboutLicense::GPL, i18n("(C) 2022 Aleix Pol Gonzalez"));
 
         about.addAuthor("Aleix Pol Gonzalez", i18n("Author"), "aleixpol@kde.org" );
