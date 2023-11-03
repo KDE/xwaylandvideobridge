@@ -14,7 +14,7 @@ This tool allows us to share specific windows to X11 clients, but within the con
 
 # How to use
 
-Launch xwaylandvideobridge it will run in the background. Next time you try to share a window a prompt will appear.
+xwaylandvideobridge should autostart on login. It will run in the background. Next time you try to share a window a prompt will appear.
 The previously selected window should now be available for sharing. The title will always be "Wayland to X11 bridge" no matter what window is selected.
 
 The system tray icon provides finer control.
