@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-02 00:44+0000\n"
+"POT-Creation-Date: 2023-11-03 00:44+0000\n"
 "PO-Revision-Date: 2023-04-08 10:44+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -29,24 +29,24 @@ msgstr "xavier.besnard@neuf.fr"
 msgid "Wayland to X Recording bridge"
 msgstr "Wayland vers un pont d'enregistrement pour X"
 
-#: src/main.cpp:29
+#: src/main.cpp:30
 #, kde-format
 msgid "Xwayland Video Bridge"
 msgstr "Pont vidéo XWayland"
 
-#: src/main.cpp:29
+#: src/main.cpp:30
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr ""
 "Proposer des flux de diffusion d'écrans pour des portails e bureaux « XDG » "
 "vers les applications sous X11"
 
-#: src/main.cpp:30
+#: src/main.cpp:31
 #, kde-format
 msgid "(C) 2022 Aleix Pol Gonzalez"
 msgstr "(C) 2022 Aleix Pol Gonzalez"
 
-#: src/main.cpp:32 src/main.cpp:33
+#: src/main.cpp:33 src/main.cpp:34
 #, kde-format
 msgid "Author"
 msgstr "Auteur"
