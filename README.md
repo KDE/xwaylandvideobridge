@@ -19,10 +19,6 @@ The previously selected window should now be available for sharing. The title wi
 
 The system tray icon provides finer control.
 
-# Compilation
-
-Right now this requires a specific hash of kpipewire until we bump this to Qt6
-
 # Use outside Plasma
 
 This should work on any desktop that supports the Xdg desktop portals and pipewire streaming and have a working system tray.
