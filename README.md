@@ -31,3 +31,11 @@ This should work on any desktop that supports the Xdg desktop portals and pipewi
 
 Ideally this should be more automatic, but this tool aims purely to serve as a stop-gap whilst we wait for these clients to get native wayland support and for the surrounding wayland protocols to be better. How much more it gets developed depends on feedback and how the surrounding ecosystem evolves.
 
+# Release Process
+
+- Check it works
+- appstream-metainfo-release-update --version 0.3.0 -d today ./src/org.kde.xwaylandvideobridge.appdata.xml
+- Update set(PROJECT_VERSION "0.3.0") in CMakeLists.txt
+- In Releaseme  mkdir xwaylandvideobridge; cd xwaylandvideobridge; ../tarme.rb --origin trunk --version 0.3.0 xwaylandvideobridge
+- scp xwaylandvideobridge ftpadmin@tinami.kde.org:  and move to right place
+- Write a blog post and put on kde-announce
