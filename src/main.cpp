@@ -11,12 +11,16 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QSessionManager>
 #include <QIcon>
 #include <KLocalizedString>
 #include <KAboutData>
 
 int main(int argc, char **argv)
 {
+    if (qgetenv("XDG_SESSION_TYPE") == "x11") {
+        return 0;
+    }
     qputenv("QT_QPA_PLATFORM", "xcb");
     qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
 
@@ -24,6 +28,12 @@ int main(int argc, char **argv)
     qputenv("QSG_RENDER_LOOP", "basic");
     QApplication app(argc, argv); // widgets are needed just for the SNI.
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+     auto disableSessionManagement = [](QSessionManager &sm) {
+        sm.setRestartHint(QSessionManager::RestartNever);
+    };
+    QObject::connect(&app, &QGuiApplication::commitDataRequest, disableSessionManagement);
+    QObject::connect(&app, &QGuiApplication::saveStateRequest, disableSessionManagement);
 
     KLocalizedString::setApplicationDomain("xwaylandvideobridge");
     {
