@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:39+0000\n"
+"POT-Creation-Date: 2023-11-11 00:44+0000\n"
 "PO-Revision-Date: 2023-10-21 13:55\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -33,22 +33,22 @@ msgstr "tysontan@tysontan.com"
 msgid "Wayland to X Recording bridge"
 msgstr "Wayland 到 X 录像桥接程序"
 
-#: src/main.cpp:30
+#: src/main.cpp:40
 #, kde-format
 msgid "Xwayland Video Bridge"
 msgstr "Xwayland 视频桥接程序"
 
-#: src/main.cpp:30
+#: src/main.cpp:40
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr "将 XDG 桌面门户投屏视频流提供给 X11 应用程序"
 
-#: src/main.cpp:31
+#: src/main.cpp:41
 #, kde-format
 msgid "(C) 2022 Aleix Pol Gonzalez"
 msgstr "(C) 2022 Aleix Pol Gonzalez"
 
-#: src/main.cpp:33 src/main.cpp:34
+#: src/main.cpp:43 src/main.cpp:44
 #, kde-format
 msgid "Author"
 msgstr "作者"
