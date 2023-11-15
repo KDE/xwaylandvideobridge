@@ -54,9 +54,9 @@ ContentsWindow::ContentsWindow()
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
 #else
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
 #endif
 
     // remove decoration. We can't use the Qt helper as we need our window type to remain something
