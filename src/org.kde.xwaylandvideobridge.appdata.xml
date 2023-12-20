@@ -88,7 +88,7 @@ SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
     <p xml:lang="zh-TW">許多 X11 應用程式會使用 X11 的機制來分享其他應用程式和螢幕的內容。近年來我們建立了 XDG Desktop Portals 作為提供這個功能的機制，而這也是我們預期應用程式會使用的。這個應用程式提供 XDG 桌面入口可用的串流給您尚未改用新系統的舊式 X11 應用程式。</p>
   </description>
   <url type="homepage">https://invent.kde.org/system/xwaylandvideobridge</url>
-  <url type="bugtracker">https://invent.kde.org/system/xwaylandvideobridge</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=XWaylandVideoBridge</url>
   <url type="donation">https://www.kde.org/community/donations</url>
   <provides>
     <binary>xwaylandvideobridge</binary>
