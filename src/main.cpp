@@ -22,7 +22,6 @@ int main(int argc, char **argv)
         return 0;
     }
     qputenv("QT_QPA_PLATFORM", "xcb");
-    qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
 
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
     qputenv("QSG_RENDER_LOOP", "basic");
