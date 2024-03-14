@@ -63,5 +63,4 @@ GenericName[zh_CN]=分享屏幕和窗口给 XWayland 应用程序
 GenericName[zh_TW]=分享螢幕和視窗給 XWayland 應用程式
 Icon=xwaylandvideobridge
 Exec=xwaylandvideobridge
-StartupNotify=false
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
