@@ -41,7 +41,7 @@ msgstr "Xwayland 视频桥接程序"
 #: src/main.cpp:40
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
-msgstr "将 XDG 桌面门户投屏视频流提供给 X11 应用程序"
+msgstr "将 XDG 桌面门户屏幕录像视频流提供给 X11 应用程序"
 
 #: src/main.cpp:41
 #, kde-format
