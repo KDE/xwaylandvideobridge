@@ -5,9 +5,9 @@
 add_executable(xwaylandvideobridge)
 
 qt_add_dbus_interface(
-   XDP_SRCS
-   org.freedesktop.portal.ScreenCast.xml
-   xdp_dbus_screencast_interface
+    XDP_SRCS
+    org.freedesktop.portal.ScreenCast.xml
+    xdp_dbus_screencast_interface
 )
 
 ecm_qt_install_logging_categories(EXPORT XWAYLANDVIDEOBRIDGE FILE xwaylandvideobridge.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
@@ -37,9 +37,9 @@ target_link_libraries(xwaylandvideobridge
     XCB::RECORD
 )
 
-if (QT_MAJOR_VERSION STREQUAL "6")
+if(QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(xwaylandvideobridge Qt6::GuiPrivate KF6::StatusNotifierItem)
-elseif (QT_MAJOR_VERSION STREQUAL "5")
+elseif(QT_MAJOR_VERSION STREQUAL "5")
     target_link_libraries(xwaylandvideobridge Qt5::X11Extras)
 endif()
 
