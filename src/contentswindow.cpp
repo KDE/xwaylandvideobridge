@@ -51,6 +51,7 @@ ContentsWindow::ContentsWindow()
     setTitle(i18n("Wayland to X Recording bridge"));
 
     setOpacity(0);
+    setFlag(Qt::Dialog);
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
