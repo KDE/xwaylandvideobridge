@@ -6,6 +6,7 @@ NoDisplay=true
 
 Type=Application
 Name=Xwayland Video Bridge
+Name[ar]=جسر فيديو ويلاند_اكس
 Name[ca]=Pont de vídeo de l'Xwayland
 Name[ca@valencia]=Pont de vídeo d'XWayland
 Name[cs]=Propojení videa Xwayland
@@ -35,6 +36,7 @@ Name[x-test]=xxXwayland Video Bridgexx
 Name[zh_CN]=Xwayland 视频桥接程序
 Name[zh_TW]=Xwayland 影像橋接
 GenericName=Share screens and windows to XWayland applications
+GenericName[ar]=مشاركة الشاشات والنوافذ لتطبيقات ويلاند_اكس
 GenericName[ca]=Comparteix pantalles i finestres amb les aplicacions XWayland
 GenericName[ca@valencia]=Compartix pantalles i finestres amb les aplicacions XWayland
 GenericName[de]=Bildschirme und Fenster mit XWayland-Anwendungen teilen
