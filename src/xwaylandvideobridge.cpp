@@ -98,9 +98,6 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject* parent)
 
     m_sni->setTitle("Wayland to X11 Video bridge");
     m_sni->setIconByName("video-display");
-    auto quitAction = new QAction(i18n("Quit"), this);
-    connect(quitAction, &QAction::triggered, qApp, &QGuiApplication::quit);
-    m_sni->addAction("quitAction", quitAction);
     m_sni->setStatus(KStatusNotifierItem::Passive);
 
     m_window->show();
