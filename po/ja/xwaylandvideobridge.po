@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-11 00:44+0000\n"
+"POT-Creation-Date: 2024-07-30 01:53+0000\n"
 "PO-Revision-Date: 2023-04-06 00:04-0700\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -47,9 +47,4 @@ msgstr ""
 #: src/main.cpp:43 src/main.cpp:44
 #, kde-format
 msgid "Author"
-msgstr ""
-
-#: src/xwaylandvideobridge.cpp:101
-#, kde-format
-msgid "Quit"
 msgstr ""

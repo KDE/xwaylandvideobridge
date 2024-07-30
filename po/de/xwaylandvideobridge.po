@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-11 00:44+0000\n"
+"POT-Creation-Date: 2024-07-30 01:53+0000\n"
 "PO-Revision-Date: 2023-04-07 15:30+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -54,7 +54,5 @@ msgstr "Copyright 2022 Aleix Pol Gonzalez"
 msgid "Author"
 msgstr "Autor"
 
-#: src/xwaylandvideobridge.cpp:101
-#, kde-format
-msgid "Quit"
-msgstr "Beenden"
+#~ msgid "Quit"
+#~ msgstr "Beenden"
