@@ -52,6 +52,3 @@ msgstr "(C) 2022 Aleix Pol Gonzalez"
 #, kde-format
 msgid "Author"
 msgstr "作者"
-
-#~ msgid "Quit"
-#~ msgstr "退出"
