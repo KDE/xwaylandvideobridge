@@ -13,8 +13,10 @@
 #include <QCommandLineParser>
 #include <QSessionManager>
 #include <QIcon>
-#include <KLocalizedString>
+
 #include <KAboutData>
+#include <KCrash>
+#include <KLocalizedString>
 
 int main(int argc, char **argv)
 {
@@ -45,6 +47,8 @@ int main(int argc, char **argv)
 
         KAboutData::setApplicationData(about);
         QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("xwaylandvideobridge"), app.windowIcon()));
+
+        KCrash::initialize();
 
         QCommandLineParser parser;
         about.setupCommandLine(&parser);
