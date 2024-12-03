@@ -27,7 +27,6 @@ target_link_libraries(xwaylandvideobridge
     KF${QT_MAJOR_VERSION}::I18n
     KF${QT_MAJOR_VERSION}::CoreAddons
     KF${QT_MAJOR_VERSION}::WindowSystem
-    KF${QT_MAJOR_VERSION}::Notifications
     KF${QT_MAJOR_VERSION}::Crash
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::DBus
@@ -39,7 +38,7 @@ target_link_libraries(xwaylandvideobridge
 )
 
 if(QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(xwaylandvideobridge Qt6::GuiPrivate KF6::StatusNotifierItem)
+    target_link_libraries(xwaylandvideobridge Qt6::GuiPrivate)
 elseif(QT_MAJOR_VERSION STREQUAL "5")
     target_link_libraries(xwaylandvideobridge Qt5::X11Extras)
 endif()

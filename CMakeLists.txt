@@ -32,7 +32,7 @@ else()
 endif()
 
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus Widgets)
 if(QT_MAJOR_VERSION STREQUAL "5")
     find_package(Qt5X11Extras ${QT_MIN_VERSION} REQUIRED)
 endif()
@@ -41,13 +41,8 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     CoreAddons
     I18n
     WindowSystem
-    Notifications
     Crash
 )
-
-if(QT_MAJOR_VERSION STREQUAL "6")
-    find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} REQUIRED)
-endif()
 
 find_package(XCB COMPONENTS REQUIRED XCB COMPOSITE EVENT RECORD XFIXES)
 

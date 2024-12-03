@@ -15,7 +15,6 @@
 
 #include <KLocalizedString>
 #include <KFileUtils>
-#include <KStatusNotifierItem>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <PipeWireSourceItem>
@@ -73,7 +72,6 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject* parent)
     , m_handleToken(QStringLiteral("xwaylandvideobridge%1").arg(QRandomGenerator::global()->generate()))
     , m_quitTimer(new QTimer(this))
     , m_window(new ContentsWindow)
-    , m_sni(new KStatusNotifierItem("pipewireToXProxy", this))
 {
     m_quitTimer->setInterval(5000);
     m_quitTimer->setSingleShot(true);
@@ -95,10 +93,6 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject* parent)
             m_quitTimer->start();
         }
     });
-
-    m_sni->setTitle("Wayland to X11 Video bridge");
-    m_sni->setIconByName("video-display");
-    m_sni->setStatus(KStatusNotifierItem::Passive);
 
     m_window->show();
 }
@@ -219,8 +213,6 @@ void XwaylandVideoBridge::start()
 
 void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
 {
-    m_sni->setStatus(KStatusNotifierItem::Active);
-
     const QVariantMap startParameters = {
         { QLatin1String("handle_token"), m_handleToken }
     };
@@ -274,7 +266,6 @@ void XwaylandVideoBridge::closeSession()
 
     m_handleToken = QStringLiteral("xwaylandvideobridge%1").arg(QRandomGenerator::global()->generate());
     m_quitTimer->stop();
-    m_sni->setStatus(KStatusNotifierItem::Passive);
 
     if (m_path.path().isEmpty())
         return;

@@ -8,8 +8,6 @@ Dependencies:
     'frameworks/kcoreaddons': '@latest-kf6'
     'frameworks/ki18n': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
-    'frameworks/knotifications': '@latest-kf6'
-    'frameworks/kstatusnotifieritem': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'
     'plasma/kpipewire': '@latest-kf6'
 
@@ -19,7 +17,6 @@ Dependencies:
     'frameworks/kcoreaddons': '@stable'
     'frameworks/ki18n': '@stable'
     'frameworks/kwindowsystem': '@stable'
-    'frameworks/knotifications': '@stable'
     'frameworks/kcrash': '@stable'
     'plasma/kpipewire': '@latest'
 
