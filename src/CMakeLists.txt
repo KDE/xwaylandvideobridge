@@ -15,9 +15,9 @@ ecm_qt_declare_logging_category(XDP_SRCS HEADER xwaylandvideobridge_debug.h IDEN
 
 target_sources(xwaylandvideobridge PRIVATE
     main.cpp
-    xwaylandvideobridge.cpp
-    contentswindow.cpp
-    x11recordingnotifier.cpp
+    xwaylandvideobridge.cpp xwaylandvideobridge.h
+    contentswindow.cpp contentswindow.h
+    x11recordingnotifier.cpp x11recordingnotifier.h
     ${XDP_SRCS}
 )
 
