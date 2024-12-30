@@ -43,8 +43,6 @@ public:
     };
     Q_ENUM(SourceTypes);
 
-    void setDuration(int duration);
-
 public Q_SLOTS:
     void response(uint code, const QVariantMap& results);
 

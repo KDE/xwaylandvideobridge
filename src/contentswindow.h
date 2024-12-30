@@ -17,7 +17,6 @@ public:
     //shadow super class
     void resize(const QSize &size);
 private:
-    void init();
     void handleResize();
 };
 
