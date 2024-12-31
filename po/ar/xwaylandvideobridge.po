@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xwaylandvideobridge\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 01:48+0000\n"
+"POT-Creation-Date: 2024-12-31 01:55+0000\n"
 "PO-Revision-Date: 2024-06-26 22:40+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -33,22 +33,22 @@ msgstr "zayed.alsaidi@gmail.com"
 msgid "Wayland to X Recording bridge"
 msgstr "جسر تسجيل ويلاند إلى أكس"
 
-#: src/main.cpp:42
+#: src/main.cpp:44
 #, kde-format
 msgid "Xwayland Video Bridge"
 msgstr "جسر فيديو ويلاند_اكس"
 
-#: src/main.cpp:42
+#: src/main.cpp:44
 #, kde-format
 msgid "Offer XDG Desktop Portals screencast streams to X11 apps"
 msgstr "يوفر دفق بث بوابة XDG لسطح المكتب لتطبيقات اكس11"
 
-#: src/main.cpp:43
+#: src/main.cpp:45
 #, kde-format
 msgid "(C) 2022 Aleix Pol Gonzalez"
 msgstr "(ج) 2022 أليكس بول جونزاليس"
 
-#: src/main.cpp:45 src/main.cpp:46
+#: src/main.cpp:47 src/main.cpp:48
 #, kde-format
 msgid "Author"
 msgstr "المؤلف"
