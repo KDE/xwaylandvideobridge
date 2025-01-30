@@ -37,9 +37,7 @@ target_link_libraries(xwaylandvideobridge
     XCB::RECORD
 )
 
-if(QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(xwaylandvideobridge Qt6::GuiPrivate)
-elseif(QT_MAJOR_VERSION STREQUAL "5")
+if(QT_MAJOR_VERSION STREQUAL "5")
     target_link_libraries(xwaylandvideobridge Qt5::X11Extras)
 endif()
 

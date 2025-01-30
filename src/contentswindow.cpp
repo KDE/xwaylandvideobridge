@@ -12,11 +12,11 @@
 #include <KWindowSystem>
 #include <KX11Extras>
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <private/qtx11extras_p.h>
-#else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QX11Info>
 #endif
+
+#include <xcb/xcb.h>
 
 struct MotifHints
 {
@@ -45,6 +45,16 @@ static xcb_atom_t intern_atom(xcb_connection_t *c, const char *name)
     return atom;
 }
 
+static xcb_connection_t *xConnection()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    auto x11App = qGuiApp->nativeInterface<QNativeInterface::QX11Application>();
+    return x11App->connection();
+#else
+    return QX11Info::connection();
+#endif
+}
+
 ContentsWindow::ContentsWindow()
 {
     resize(QSize(100, 100));
@@ -64,8 +74,8 @@ ContentsWindow::ContentsWindow()
     // that keeps us valid for streams
     MotifHints hints;
     hints.flags = 2;
-    xcb_atom_t motif_hints_atom = intern_atom(QX11Info::connection(), "_MOTIF_WM_HINTS");
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, winId(), motif_hints_atom, motif_hints_atom, 32, 5, (const void *)&hints);
+    xcb_atom_t motif_hints_atom = intern_atom(xConnection(), "_MOTIF_WM_HINTS");
+    xcb_change_property(xConnection(), XCB_PROP_MODE_REPLACE, winId(), motif_hints_atom, motif_hints_atom, 32, 5, (const void *)&hints);
 
     handleResize();
 }
@@ -101,6 +111,6 @@ void ContentsWindow::handleResize()
     frame.left = width() -1 ;
     setX(-width() + 1); // unforutnately we still need 1px on screen to get callbacks
 
-    xcb_atom_t gtk_frame_extent_atom = intern_atom(QX11Info::connection(), "_GTK_FRAME_EXTENTS");
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, winId(), gtk_frame_extent_atom, XCB_ATOM_CARDINAL, 32, 4, (const void *)&frame);
+    xcb_atom_t gtk_frame_extent_atom = intern_atom(xConnection(), "_GTK_FRAME_EXTENTS");
+    xcb_change_property(xConnection(), XCB_PROP_MODE_REPLACE, winId(), gtk_frame_extent_atom, XCB_ATOM_CARDINAL, 32, 4, (const void *)&frame);
 }
