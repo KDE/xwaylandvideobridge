@@ -33,6 +33,9 @@ endif()
 
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus Widgets)
+if(QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6 COMPONENTS GuiPrivate REQUIRED)
+endif()
 if(QT_MAJOR_VERSION STREQUAL "5")
     find_package(Qt5X11Extras ${QT_MIN_VERSION} REQUIRED)
 endif()
