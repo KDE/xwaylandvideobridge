@@ -1,9 +1,8 @@
 /*
- * Copyright 2023 David Edmundson <davidedmundson@kde.org>
- *
  * SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
  * SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
  * SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+ * SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
  */
 
 #include "contentswindow.h"
@@ -11,96 +10,63 @@
 #include <KLocalizedString>
 #include <KWindowSystem>
 #include <KX11Extras>
+#include <QCloseEvent>
+#include <QGuiApplication>
+#include <QScreen>
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <private/qtx11extras_p.h>
-#else
-#include <QX11Info>
-#endif
+#include <xcb/xcb.h>
 
-struct MotifHints
+static xcb_connection_t *xcbConnection()
 {
-    u_int32_t flags = 0;
-    u_int32_t functions = 0;
-    u_int32_t decorations = 0;
-    int32_t inputMode = 0;
-    u_int32_t status = 0;
-};
-
-struct GtkFrameExtents
-{
-    uint32_t left = 0;
-    uint32_t right = 0;
-    uint32_t top = 0;
-    uint32_t bottom = 0;
-};
+    auto *x11 = qApp->nativeInterface<QNativeInterface::QX11Application>();
+    return x11 ? x11->connection() : nullptr;
+}
 
 static xcb_atom_t intern_atom(xcb_connection_t *c, const char *name)
 {
     xcb_atom_t atom = XCB_NONE;
-    QScopedPointer<xcb_intern_atom_reply_t, QScopedPointerPodDeleter> reply(xcb_intern_atom_reply(c, xcb_intern_atom(c, false, strlen(name), name), nullptr));
-    if (reply) {
+    QScopedPointer<xcb_intern_atom_reply_t, QScopedPointerPodDeleter> reply(
+        xcb_intern_atom_reply(c, xcb_intern_atom(c, false, strlen(name), name),
+                              nullptr));
+    if (reply)
         atom = reply->atom;
-    }
     return atom;
 }
 
 ContentsWindow::ContentsWindow()
 {
-    resize(QSize(100, 100));
-    setTitle(i18n("Wayland to X Recording bridge"));
+    if (!KWindowSystem::isPlatformX11())
+        return;
 
+    setTitle(i18n("Wayland to X Recording bridge"));
+    setColor(Qt::black);
     setOpacity(0);
-    setFlag(Qt::Dialog);
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-#else
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-#endif
+    KX11Extras::setState(winId(),
+                         NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
 
-    // remove decoration. We can't use the Qt helper as we need our window type to remain something
-    // that keeps us valid for streams
-    MotifHints hints;
-    hints.flags = 2;
-    xcb_atom_t motif_hints_atom = intern_atom(QX11Info::connection(), "_MOTIF_WM_HINTS");
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, winId(), motif_hints_atom, motif_hints_atom, 32, 5, (const void *)&hints);
+    auto *c = xcbConnection();
 
-    handleResize();
+    xcb_atom_t net_wm_window_type = intern_atom(c, "_NET_WM_WINDOW_TYPE");
+    xcb_atom_t wm_type_normal = intern_atom(c, "_NET_WM_WINDOW_TYPE_NORMAL");
+    xcb_change_property(c, XCB_PROP_MODE_REPLACE, winId(), net_wm_window_type,
+                        XCB_ATOM_ATOM, 32, 1, &wm_type_normal);
+
+    QRect combined;
+    for (QScreen *s : QGuiApplication::screens())
+        combined = combined.united(s->geometry());
+    setPosition(combined.topLeft());
+    QQuickWindow::resize(combined.size());
+
+    showNormal();
+    KX11Extras::setState(winId(), NET::KeepBelow | NET::FullScreen |
+    NET::SkipTaskbar | NET::SkipPager |
+    NET::SkipSwitcher);
 }
 
-void ContentsWindow::resize(const QSize &size)
+void ContentsWindow::closeEvent(QCloseEvent *event)
 {
-    if (size.isEmpty()) {
-        return;
-    }
-    QQuickWindow::resize(size);
-    handleResize();
-}
-
-void ContentsWindow::handleResize()
-{
-    // In theory this isn't needed - we're transparent for input, but a bug in either Xorg or kwin means
-    // that it doesn't. If we forward to X it falls to the X window underneath, but kwin still "knows" theres
-    // an xwayland surface there and sends to X and not the right client
-    // Solvable by either kwin checking event mask or Xserver setting a null input_region based on the event mask
-
-    // but I want things now! so instead do a hack of moving things offscreen
-    // hopefully drop for a Plasma 6
-
-    // if we blindly just set oursevles to offscreen, kwin will try to position us back
-    // if we set override-redirect screencast clients skip us.
-
-    // frames can be offscreen though, so lets make the whole window part of the frame and then
-    // put that bit of "frame" offscreen
-
-    // Don't let window manager devs see this
-    GtkFrameExtents frame;
-    frame.top = height() - 1;
-    frame.left = width() -1 ;
-    setX(-width() + 1); // unforutnately we still need 1px on screen to get callbacks
-
-    xcb_atom_t gtk_frame_extent_atom = intern_atom(QX11Info::connection(), "_GTK_FRAME_EXTENTS");
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, winId(), gtk_frame_extent_atom, XCB_ATOM_CARDINAL, 32, 4, (const void *)&frame);
+    event->ignore();
+    Q_EMIT mirrorWindowClosed();
 }

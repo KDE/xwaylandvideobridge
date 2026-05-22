@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
+.flatpak-builder/
+build-dir/
+build/
+result/
+result
+/result
+/result-*
+flake.lock

@@ -2,36 +2,36 @@
 SPDX-License-Identifier: BSD-3-Clause
 SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
 SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
 -->
 
 # XWayland Video Bridge
 
-# About
+## About
 
-By design, X11 applications can't access window or screen contents for wayland clients. This is fine in principle, but it breaks screen sharing in tools like Discord, MS Teams, Skype, etc and more.
+By design, X11 applications cannot access window or screen contents for Wayland clients. This is fine in principle, but it breaks screen sharing in tools like Discord, MS Teams, Skype, Webex, and others.
 
-This tool allows us to share specific windows to X11 clients, but within the control of the user at all times.
+This tool allows you to share specific windows with X11 clients, while keeping the user in full control at all times.
 
-# How to use
+## How to use
 
-xwaylandvideobridge should autostart on login. It will run in the background. Next time you try to share a window a prompt will appear.
-The previously selected window should now be available for sharing. The title will always be "Wayland to X11 bridge" no matter what window is selected.
+xwaylandvideobridge should autostart on login. It will run silently in the background. The next time you try to share a window, a prompt will appear asking you to select what to share. The previously selected window will then be available for sharing in the X11 application.
 
-The system tray icon provides finer control.
+The system tray icon provides finer control over the bridge.
 
-# Use outside Plasma
+## Use outside Plasma
 
-This should work on any desktop that supports the Xdg desktop portals and pipewire streaming and have a working system tray.
+This should work on any desktop that supports XDG Desktop Portals and PipeWire streaming and has a working system tray.
 
-# Future
+## Future
 
-Ideally this should be more automatic, but this tool aims purely to serve as a stop-gap whilst we wait for these clients to get native wayland support and for the surrounding wayland protocols to be better. How much more it gets developed depends on feedback and how the surrounding ecosystem evolves.
+Ideally this should be more automatic, but this tool aims purely to serve as a stop-gap whilst we wait for these clients to get native Wayland support and for the surrounding Wayland protocols to mature. How much further it gets developed depends on feedback and how the surrounding ecosystem evolves.
 
 # Release Process
 
 - Check it works
-- appstream-metainfo-release-update --version 0.3.0 -d today ./src/org.kde.xwaylandvideobridge.appdata.xml
-- Update set(PROJECT_VERSION "0.3.0") in CMakeLists.txt
-- In Releaseme  mkdir xwaylandvideobridge; cd xwaylandvideobridge; ../tarme.rb --origin trunk --version 0.3.0 xwaylandvideobridge
+- appstream-metainfo-release-update --version 0.5.0 -d today ./src/org.kde.xwaylandvideobridge.appdata.xml
+- Update set(PROJECT_VERSION "0.5.0") in CMakeLists.txt
+- In Releaseme  mkdir xwaylandvideobridge; cd xwaylandvideobridge; ../tarme.rb --origin trunk --version 0.5.0 xwaylandvideobridge
 - scp xwaylandvideobridge ftpadmin@tinami.kde.org:  and move to right place
 - Write a blog post and put on kde-announce

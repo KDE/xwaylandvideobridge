@@ -9,16 +9,8 @@ Dependencies:
     'frameworks/ki18n': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'
+    'frameworks/kstatusnotifieritem': '@latest-kf6'
     'plasma/kpipewire': '@latest-kf6'
-
- - 'on': ['Linux/Qt5', 'FreeBSD/Qt5']
-   'require':
-    'frameworks/extra-cmake-modules': '@stable'
-    'frameworks/kcoreaddons': '@stable'
-    'frameworks/ki18n': '@stable'
-    'frameworks/kwindowsystem': '@stable'
-    'frameworks/kcrash': '@stable'
-    'plasma/kpipewire': '@latest'
 
 Options:
  require-passing-tests-on: ['Linux']

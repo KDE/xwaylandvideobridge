@@ -1,15 +1,15 @@
 /*
- * App to render feeds coming from xdg-desktop-portal
- *
  * SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
  * SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+ * SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
  */
 
 #pragma once
 
-#include <QObject>
-#include <QDBusObjectPath>
+#include <KStatusNotifierItem>
 #include <PipeWireRecord>
+#include <QDBusObjectPath>
+#include <QObject>
 
 class QTimer;
 class ContentsWindow;
@@ -22,37 +22,30 @@ struct Stream {
 
 class OrgFreedesktopPortalScreenCastInterface;
 
-class XwaylandVideoBridge : public QObject
-{
+class XwaylandVideoBridge : public QObject {
     Q_OBJECT
 public:
-    XwaylandVideoBridge(QObject* parent = nullptr);
+    explicit XwaylandVideoBridge(QObject *parent = nullptr);
     ~XwaylandVideoBridge() override;
 
-    enum CursorMode {
-        Hidden = 1,
-        Embedded = 2,
-        Metadata = 4
-    };
-    Q_ENUM(CursorMode);
+    enum CursorMode { Hidden = 1, Embedded = 2, Metadata = 4 };
+    Q_ENUM(CursorMode)
     Q_DECLARE_FLAGS(CursorModes, CursorMode)
 
-    enum SourceTypes {
-        Monitor = 1,
-        Window = 2
-    };
-    Q_ENUM(SourceTypes);
+    enum SourceTypes { Monitor = 1, Window = 2, Virtual = 4 };
+    Q_ENUM(SourceTypes)
 
 public Q_SLOTS:
-    void response(uint code, const QVariantMap& results);
+    void response(uint code, const QVariantMap &results);
+
+private Q_SLOTS:
+    void closeSession();
 
 private:
     void init();
     void startStream(const QDBusObjectPath &path);
     void handleStreams(const QVector<Stream> &streams);
     void start();
-    void closeSession();
-    void closed();
 
     OrgFreedesktopPortalScreenCastInterface *iface;
     QDBusObjectPath m_path;
@@ -61,4 +54,6 @@ private:
     QTimer *m_quitTimer;
     QScopedPointer<ContentsWindow> m_window;
     PipeWireSourceItem *m_pipeWireItem = nullptr;
+    KStatusNotifierItem *m_trayIcon = nullptr;
+    bool m_sessionActive = false;
 };

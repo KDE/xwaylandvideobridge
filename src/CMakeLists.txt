@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
 # SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+# SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
 
 add_executable(xwaylandvideobridge)
 
@@ -24,24 +25,20 @@ target_sources(xwaylandvideobridge PRIVATE
 configure_file(version.h.in version.h)
 
 target_link_libraries(xwaylandvideobridge
-    KF${QT_MAJOR_VERSION}::I18n
-    KF${QT_MAJOR_VERSION}::CoreAddons
-    KF${QT_MAJOR_VERSION}::WindowSystem
-    KF${QT_MAJOR_VERSION}::Crash
-    Qt${QT_MAJOR_VERSION}::Quick
-    Qt${QT_MAJOR_VERSION}::DBus
-    Qt${QT_MAJOR_VERSION}::Widgets
+    KF6::I18n
+    KF6::CoreAddons
+    KF6::WindowSystem
+    KF6::Crash
+    KF6::StatusNotifierItem
+    Qt6::Quick
+    Qt6::DBus
+    Qt6::Widgets
     K::KPipeWireRecord
     XCB::XCB
     XCB::COMPOSITE
     XCB::RECORD
+    XCB::XFIXES
 )
-
-if(QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(xwaylandvideobridge Qt6::GuiPrivate)
-elseif(QT_MAJOR_VERSION STREQUAL "5")
-    target_link_libraries(xwaylandvideobridge Qt5::X11Extras)
-endif()
 
 install(TARGETS xwaylandvideobridge ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_APPDIR})

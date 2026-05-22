@@ -1,22 +1,22 @@
 /*
  * SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
  * SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+ * SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
  */
 
 #pragma once
 
-#include <QQuickWindow>
 #include <QObject>
+#include <QQuickWindow>
 
-class ContentsWindow : public QQuickWindow
-{
+class ContentsWindow : public QQuickWindow {
     Q_OBJECT
 public:
     ContentsWindow();
 
-    //shadow super class
-    void resize(const QSize &size);
-private:
-    void handleResize();
-};
+Q_SIGNALS:
+    void mirrorWindowClosed();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+};
