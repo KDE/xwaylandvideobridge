@@ -113,10 +113,10 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
             this, &XwaylandVideoBridge::closeSession);
 
     m_trayIcon = new KStatusNotifierItem(this);
-    m_trayIcon->setIconByName(QStringLiteral("xwaylandvideobridge"));
+    m_trayIcon->setIconByName(QStringLiteral("org.kde.xwaylandvideobridge"));
     m_trayIcon->setTitle(i18n("Wayland to X11 Video Bridge"));
     m_trayIcon->setToolTip(
-        QStringLiteral("xwaylandvideobridge"),
+        QStringLiteral("org.kde.xwaylandvideobridge"),
                            i18n("Wayland to X11 Video Bridge"),
                            i18n("Utility to allow streaming Wayland windows to X applications"));
     m_trayIcon->setStatus(KStatusNotifierItem::Passive);

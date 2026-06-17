@@ -63,6 +63,6 @@ GenericName[uk]=Спільне користування екранами та в
 GenericName[x-test]=xxShare screens and windows to XWayland applicationsxx
 GenericName[zh_CN]=分享屏幕和窗口给 XWayland 应用程序
 GenericName[zh_TW]=分享螢幕和視窗給 XWayland 應用程式
-Icon=xwaylandvideobridge
+Icon=org.kde.xwaylandvideobridge
 Exec=xwaylandvideobridge
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;

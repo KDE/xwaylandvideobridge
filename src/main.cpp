@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
     KAboutData::setApplicationData(about);
     QGuiApplication::setWindowIcon(
-        QIcon::fromTheme(QStringLiteral("xwaylandvideobridge"), app.windowIcon()));
+        QIcon::fromTheme(QStringLiteral("org.kde.xwaylandvideobridge"), app.windowIcon()));
     KCrash::initialize();
 
     QCommandLineParser parser;

@@ -27,7 +27,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/plasma/kpipewire.git",
-                    "branch": "Plasma/6.6"
+                    "branch": "Plasma/6.7"
                 }
             ]
         },
