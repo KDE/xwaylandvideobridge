@@ -33,7 +33,7 @@
             }:
             stdenv.mkDerivation {
               pname = "xwaylandvideobridge";
-              version = "0.5.0-kf6";
+              version = "0.5.1-kf6";
               src = ./.;
               nativeBuildInputs = [
                 cmake
