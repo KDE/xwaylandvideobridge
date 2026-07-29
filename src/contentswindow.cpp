@@ -43,6 +43,7 @@ ContentsWindow::ContentsWindow()
     setOpacity(0);
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
+    setFlag(Qt::FramelessWindowHint);
     KX11Extras::setState(winId(),
                          NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
 
