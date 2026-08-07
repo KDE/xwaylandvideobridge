@@ -5,7 +5,9 @@
     "runtime-version": "6.11",
     "sdk": "org.kde.Sdk",
     "command": "xwaylandvideobridge",
-    "tags": ["nightly"],
+    "tags": [
+        "nightly"
+    ],
     "desktop-file-name-suffix": " (Nightly)",
     "finish-args": [
         "--share=ipc",
@@ -17,10 +19,11 @@
         "--talk-name=org.freedesktop.portal.Desktop",
         "--env=QT_LOGGING_DEBUG=*.debug=true qt.qpa.input*.debug=false"
     ],
-
     "modules": [
         {
-            "config-opts": [ "-DBUILD_TESTING=OFF" ],
+            "config-opts": [
+                "-DBUILD_TESTING=OFF"
+            ],
             "name": "kpipewire",
             "buildsystem": "cmake-ninja",
             "sources": [
