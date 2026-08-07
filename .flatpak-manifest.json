@@ -21,10 +21,10 @@
     ],
     "modules": [
         {
+            "name": "kpipewire",
             "config-opts": [
                 "-DBUILD_TESTING=OFF"
             ],
-            "name": "kpipewire",
             "buildsystem": "cmake-ninja",
             "sources": [
                 {
@@ -36,6 +36,9 @@
         },
         {
             "name": "xwaylandvideobridge",
+            "config-opts": [
+                "-DBUILD_TESTING=OFF"
+            ],
             "buildsystem": "cmake-ninja",
             "sources": [
                 {
