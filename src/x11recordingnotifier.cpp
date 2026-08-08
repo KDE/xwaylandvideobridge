@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-KDE-Accepted-GPL
  * SPDX-FileCopyrightText: 2023 David Edmundson <kde@davidedmundson.co.uk>
  * SPDX-FileCopyrightText: 2023 Aleix Pol <aleixpol@kde.org>
+ * SPDX-FileCopyrightText: 2026 Hadi Chokr <hadichokr@icloud.com>
  */
 
 #include "x11recordingnotifier.h"
@@ -26,18 +27,29 @@
 
 struct XCBResponse
 {
+    XCBResponse() = default;
+    XCBResponse(const XCBResponse &) = delete;
+    XCBResponse &operator=(const XCBResponse &) = delete;
     ~XCBResponse();
-    
+
+    void reset();
+
     xcb_record_enable_context_reply_t *reply = nullptr;
     xcb_generic_error_t *error = nullptr;
 };
 
-XCBResponse::~XCBResponse() {
+void XCBResponse::reset()
+{
     std::free(this->reply);
     std::free(this->error);
 
     this->reply = nullptr;
     this->error = nullptr;
+}
+
+XCBResponse::~XCBResponse()
+{
+    reset();
 }
 
 X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
@@ -48,7 +60,7 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
     // and we get multiple replies to a request rather than events
     m_connection = xcb_connect(nullptr, nullptr);
     auto c = m_connection;
-    xcb_generic_error_t *error;
+    xcb_generic_error_t *error = nullptr;
 
     if (!c) {
         qWarning("Error to open local display. Auto activation will fail!\n");
@@ -59,16 +71,22 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
     {
         xcb_query_extension_cookie_t cookie = xcb_query_extension(c, strlen("Composite"), "Composite");
         QScopedPointer<xcb_query_extension_reply_t, QScopedPointerPodDeleter> reply(xcb_query_extension_reply(c, cookie, nullptr));
+        if (!reply || !reply->present) {
+            qWarning("Composite extension unavailable. Auto activation will fail!");
+            return;
+        }
         compositeExtensionOpCode = reply->major_opcode;
     }
 
     // check the xcb_record extension exists
     {
-        auto cookie = xcb_record_query_version(c, 0, 0);
+        auto cookie = xcb_record_query_version(c, XCB_RECORD_MAJOR_VERSION, XCB_RECORD_MINOR_VERSION);
         QScopedPointer<xcb_record_query_version_reply_t, QScopedPointerPodDeleter> reply(xcb_record_query_version_reply(c, cookie, &error));
+        std::free(error);
+        error = nullptr;
         if (!reply) {
-            qWarning() << ("Failed to create recording context");
-        } else {
+            qWarning("Record extension unavailable. Auto activation will fail!");
+            return;
         }
     }
 
@@ -85,6 +103,8 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
     auto err = xcb_request_check(c, cookie);
     if (err) {
         qWarning() << ("Failed to create recording context");
+        std::free(err);
+        return;
     }
 
     auto enableCookie = xcb_record_enable_context(c, m_recordingContext).sequence;
@@ -115,7 +135,7 @@ X11RecordingNotifier::X11RecordingNotifier(WId window, QObject *parent)
             }
 
             handleNewRecord(*record.reply);
-            record = XCBResponse();
+            record.reset();
         }
     });
 }
@@ -170,11 +190,16 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &re
         m_redirectionCount[caller]++;
         break;
     case XCB_COMPOSITE_UNREDIRECT_WINDOW:
-    case XCB_COMPOSITE_UNREDIRECT_SUBWINDOWS:
-        if (m_redirectionCount[caller]-- == 0) {
-            m_redirectionCount.remove(caller);
+    case XCB_COMPOSITE_UNREDIRECT_SUBWINDOWS: {
+        auto it = m_redirectionCount.find(caller);
+        if (it == m_redirectionCount.end()) {
+            break;
+        }
+        if (--(*it) <= 0) {
+            m_redirectionCount.erase(it);
         }
         break;
+    }
     default:
         break;
     }
