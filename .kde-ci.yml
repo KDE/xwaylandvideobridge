@@ -6,6 +6,7 @@ Dependencies:
    'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kcoreaddons': '@latest-kf6'
+    'frameworks/kdbusaddons': '@latest-kf6'
     'frameworks/ki18n': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'

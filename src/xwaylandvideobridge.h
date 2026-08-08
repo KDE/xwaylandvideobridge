@@ -6,23 +6,25 @@
 
 #pragma once
 
-#include <KStatusNotifierItem>
-#include <PipeWireRecord>
 #include <QDBusObjectPath>
 #include <QObject>
+#include <QScopedPointer>
+#include <QVariant>
 
 class QTimer;
 class ContentsWindow;
+class KStatusNotifierItem;
 class PipeWireSourceItem;
+class X11RecordingNotifier;
+class OrgFreedesktopPortalScreenCastInterface;
 
 struct Stream {
-    uint nodeId;
+    uint nodeId = 0;
     QVariantMap opts;
 };
 
-class OrgFreedesktopPortalScreenCastInterface;
-
-class XwaylandVideoBridge : public QObject {
+class XwaylandVideoBridge : public QObject
+{
     Q_OBJECT
 public:
     explicit XwaylandVideoBridge(QObject *parent = nullptr);
@@ -43,16 +45,21 @@ private Q_SLOTS:
 
 private:
     void init();
-    void startStream(const QDBusObjectPath &path);
-    void handleStreams(const QVector<Stream> &streams);
+    void resetSession();
+    void selectSources(const QDBusObjectPath &sessionPath);
     void start();
+    void handleStreams(const QVector<Stream> &streams);
+    void clearStream();
+    void fitItemToWindow();
 
-    OrgFreedesktopPortalScreenCastInterface *iface;
-    QDBusObjectPath m_path;
+    OrgFreedesktopPortalScreenCastInterface *m_portal;
+    QDBusObjectPath m_sessionPath;
+    QDBusObjectPath m_requestPath;
     QString m_handleToken;
 
     QTimer *m_quitTimer;
     QScopedPointer<ContentsWindow> m_window;
+    X11RecordingNotifier *m_recordingNotifier = nullptr;
     PipeWireSourceItem *m_pipeWireItem = nullptr;
     KStatusNotifierItem *m_trayIcon = nullptr;
     bool m_sessionActive = false;

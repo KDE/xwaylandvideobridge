@@ -27,6 +27,7 @@ configure_file(version.h.in version.h)
 target_link_libraries(xwaylandvideobridge
     KF6::I18n
     KF6::CoreAddons
+    KF6::DBusAddons
     KF6::WindowSystem
     KF6::Crash
     KF6::StatusNotifierItem
