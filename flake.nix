@@ -24,6 +24,7 @@
               qtdeclarative,
               kcoreaddons,
               kcrash,
+              kdbusaddons,
               ki18n,
               kpipewire,
               kstatusnotifieritem,
@@ -46,6 +47,7 @@
                 qtdeclarative
                 kcoreaddons
                 kcrash
+                kdbusaddons
                 ki18n
                 kpipewire
                 kstatusnotifieritem

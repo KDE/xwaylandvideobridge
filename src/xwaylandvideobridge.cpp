@@ -199,12 +199,7 @@ void XwaylandVideoBridge::closeSession()
     }
 
     if (!m_sessionPath.path().isEmpty()) {
-        bus.disconnect(QString(),
-                       m_sessionPath.path(),
-                       QLatin1String("org.freedesktop.portal.Session"),
-                       QLatin1String("Closed"),
-                       this,
-                       SLOT(closeSession()));
+        bus.disconnect(QString(), m_sessionPath.path(), QLatin1String("org.freedesktop.portal.Session"), QLatin1String("Closed"), this, SLOT(closeSession()));
 
         QDBusMessage closeMsg = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                                                m_sessionPath.path(),
@@ -289,12 +284,8 @@ void XwaylandVideoBridge::selectSources(const QDBusObjectPath &sessionPath)
 {
     m_sessionPath = sessionPath;
 
-    QDBusConnection::sessionBus().connect(QString(),
-                                          m_sessionPath.path(),
-                                          QLatin1String("org.freedesktop.portal.Session"),
-                                          QLatin1String("Closed"),
-                                          this,
-                                          SLOT(closeSession()));
+    QDBusConnection::sessionBus()
+        .connect(QString(), m_sessionPath.path(), QLatin1String("org.freedesktop.portal.Session"), QLatin1String("Closed"), this, SLOT(closeSession()));
 
     const CursorModes availableCursorModes = static_cast<CursorModes>(m_portal->availableCursorModes());
     CursorMode cursorMode = CursorMode::Hidden;

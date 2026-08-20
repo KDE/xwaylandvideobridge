@@ -30,11 +30,19 @@ public:
     explicit XwaylandVideoBridge(QObject *parent = nullptr);
     ~XwaylandVideoBridge() override;
 
-    enum CursorMode { Hidden = 1, Embedded = 2, Metadata = 4 };
+    enum CursorMode {
+        Hidden = 1,
+        Embedded = 2,
+        Metadata = 4
+    };
     Q_ENUM(CursorMode)
     Q_DECLARE_FLAGS(CursorModes, CursorMode)
 
-    enum SourceTypes { Monitor = 1, Window = 2, Virtual = 4 };
+    enum SourceTypes {
+        Monitor = 1,
+        Window = 2,
+        Virtual = 4
+    };
     Q_ENUM(SourceTypes)
 
 public Q_SLOTS:
