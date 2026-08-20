@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(xwaylandvideobridge)
 
-set(PROJECT_VERSION "0.5.1")
+set(PROJECT_VERSION "0.5.2")
 set(QT_MIN_VERSION "6.4")
 set(KF_MIN_VERSION "5.240.0")
 set(KF_MAJOR_VERSION "6")
