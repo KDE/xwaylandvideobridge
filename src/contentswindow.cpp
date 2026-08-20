@@ -36,7 +36,7 @@ static xcb_atom_t internAtom(xcb_connection_t *connection, const char *name)
 {
     QScopedPointer<xcb_intern_atom_reply_t, QScopedPointerPodDeleter> reply(
         xcb_intern_atom_reply(connection, xcb_intern_atom(connection, false, strlen(name), name), nullptr));
-    return reply ? reply->atom : XCB_ATOM_NONE;
+    return reply ? reply->atom : static_cast<xcb_atom_t>(XCB_ATOM_NONE);
 }
 
 static bool haveXFixes(xcb_connection_t *connection)

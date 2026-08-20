@@ -356,7 +356,12 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
 
     m_pipeWireItem = new PipeWireSourceItem(m_window->contentItem());
     m_pipeWireItem->setFd(reply.value().takeFileDescriptor());
+
+    QT_WARNING_PUSH
+    QT_WARNING_DISABLE_DEPRECATED
     m_pipeWireItem->setNodeId(streams.constFirst().nodeId);
+    QT_WARNING_POP
+
     m_pipeWireItem->setVisible(true);
     fitItemToWindow();
 
