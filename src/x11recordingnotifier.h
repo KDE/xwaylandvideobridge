@@ -25,6 +25,7 @@ public:
 
 Q_SIGNALS:
     void isRedirectedChanged();
+    void redirectRequested();
 
 private:
     void handleNewRecord(xcb_record_enable_context_reply_t &reply);

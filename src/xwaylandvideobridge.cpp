@@ -104,6 +104,8 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
         }
     });
 
+    connect(m_recordingNotifier, &X11RecordingNotifier::redirectRequested, this, &XwaylandVideoBridge::init);
+
     connect(m_window.data(), &ContentsWindow::windowIdChanged, this, [this](WId windowId) {
         m_recordingNotifier->setWindowId(windowId);
     });

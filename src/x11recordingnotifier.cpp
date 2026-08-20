@@ -179,6 +179,7 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &re
 
     const uint8_t *data = xcb_record_enable_context_data(&reply);
     int available = xcb_record_enable_context_data_length(&reply);
+    bool sawRedirect = false;
 
     // One reply can carry several requests. Stopping after the first one loses unredirects and leaves the
     // window pinned at capture size for the rest of the session.
@@ -186,7 +187,7 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &re
         auto *request = reinterpret_cast<const xcb_composite_redirect_window_request_t *>(data);
         const int requestSize = request->length * 4;
         if (requestSize < static_cast<int>(sizeof(*request)) || requestSize > available) {
-            return;
+            break;
         }
 
         data += requestSize;
@@ -200,6 +201,7 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &re
         case XCB_COMPOSITE_REDIRECT_WINDOW:
         case XCB_COMPOSITE_REDIRECT_SUBWINDOWS:
             m_redirectionCount[reply.xid_base]++;
+            sawRedirect = true;
             break;
         case XCB_COMPOSITE_UNREDIRECT_WINDOW:
         case XCB_COMPOSITE_UNREDIRECT_SUBWINDOWS: {
@@ -212,5 +214,11 @@ void X11RecordingNotifier::handleNewRecord(xcb_record_enable_context_reply_t &re
         default:
             break;
         }
+    }
+
+    // A client that drops and retakes the window in one batch of requests leaves isRedirected() unchanged,
+    // so the count alone cannot say that a fresh capture started.
+    if (sawRedirect && isRedirected()) {
+        Q_EMIT redirectRequested();
     }
 }
