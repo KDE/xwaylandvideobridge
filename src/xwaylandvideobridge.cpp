@@ -357,10 +357,18 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
     m_pipeWireItem = new PipeWireSourceItem(m_window->contentItem());
     m_pipeWireItem->setFd(reply.value().takeFileDescriptor());
 
-    QT_WARNING_PUSH
-    QT_WARNING_DISABLE_DEPRECATED
-    m_pipeWireItem->setNodeId(streams.constFirst().nodeId);
-    QT_WARNING_POP
+    const Stream &stream = streams.constFirst();
+    const auto serial = stream.opts.constFind(QLatin1String("pipewire-serial"));
+    if (serial != stream.opts.constEnd()) {
+        m_pipeWireItem->setObjectSerial(serial->toULongLong());
+    } else {
+        // keep backwards compatiblity for now till it breaks
+        QT_WARNING_PUSH
+        QT_WARNING_DISABLE_DEPRECATED
+        m_pipeWireItem->setNodeId(stream.nodeId);
+        QT_WARNING_POP
+    }
+
 
     m_pipeWireItem->setVisible(true);
     fitItemToWindow();
