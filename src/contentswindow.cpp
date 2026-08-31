@@ -23,8 +23,9 @@
 #include <xcb/xcb.h>
 #include <xcb/xfixes.h>
 
-// Big enough to be recognisable in an X11 share dialog, small enough not to matter if it is ever left behind.
-static const QSize s_idleSize(640, 360);
+// Still listed by X11 share dialogs, small enough that it costs nothing if it is ever left behind or
+// stops being click-through.
+static const QSize s_idleSize(64, 36);
 
 static xcb_connection_t *xcbConnection()
 {
