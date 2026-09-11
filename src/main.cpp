@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
     qputenv("QSG_RENDER_LOOP", "basic");
 
-    // QApplication rather than QGuiApplication because KStatusNotifierItem needs widgets on some platforms.
+    // QApplication since the tray menu is a QMenu and KStatusNotifierItem can fall back to QSystemTrayIcon.
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
 

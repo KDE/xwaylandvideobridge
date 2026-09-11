@@ -129,7 +129,7 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
     auto *resetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reset Bridge"));
     connect(resetAction, &QAction::triggered, this, &XwaylandVideoBridge::resetSession);
 
-    // The window is deliberately invisible, so the tray menu is the only way for a user to get rid of it.
+    // The window is invisible, so the tray menu is the only way to quit from the UI.
     auto *quitAction = menu->addAction(QIcon::fromTheme(QStringLiteral("application-exit")), i18n("Quit"));
     connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
     m_trayIcon->setContextMenu(menu);
@@ -151,8 +151,7 @@ void XwaylandVideoBridge::fitItemToWindow()
     const QSizeF windowSize = m_window->size();
     const QSize streamSize = m_pipeWireItem->streamSize();
 
-    // The window manager clamps the window to the work area, so the stream is scaled into what was granted
-    // rather than being left to fall outside the window.
+    // The window can be smaller than the stream (work area cap, WM constraints), so scale the stream to fit.
     const QSizeF target = streamSize.isEmpty() ? windowSize : QSizeF(streamSize).scaled(windowSize, Qt::KeepAspectRatio);
 
     m_pipeWireItem->setSize(target);
@@ -184,8 +183,7 @@ void XwaylandVideoBridge::closeSession()
 
     clearStream();
 
-    // An oversized window left mapped without a stream swallows pointer input across a whole output, so it
-    // shrinks even if a client still has it redirected.
+    // Shrink even if still redirected. A big leftover window would eat input if click-through ever broke.
     m_window->goIdle();
 
     QDBusConnection bus = QDBusConnection::sessionBus();
@@ -207,7 +205,7 @@ void XwaylandVideoBridge::closeSession()
                                                                m_sessionPath.path(),
                                                                QLatin1String("org.freedesktop.portal.Session"),
                                                                QLatin1String("Close"));
-        // Closed can bring us here from inside a D-Bus callback, and the reply is of no use anyway.
+        // We don't need the reply, and after Closed the session is gone anway.
         bus.call(closeMsg, QDBus::NoBlock);
         m_sessionPath = {};
     }
@@ -233,8 +231,8 @@ void XwaylandVideoBridge::init()
         return;
     }
 
-    // The portal derives the request path from handle_token, so this one connection covers the responses to
-    // every request made with this token.
+    // The request path comes from our bus name and handle_token, so one connection covers every request
+    // as long as they don't overlap.
     m_requestPath = reply.value();
 
     const bool connected = QDBusConnection::sessionBus().connect(QString(),
@@ -362,13 +360,12 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
     if (serial != stream.opts.constEnd()) {
         m_pipeWireItem->setObjectSerial(serial->toULongLong());
     } else {
-        // keep backwards compatiblity for now till it breaks
+        // Pre-v6 portals only give us the node id.
         QT_WARNING_PUSH
         QT_WARNING_DISABLE_DEPRECATED
         m_pipeWireItem->setNodeId(stream.nodeId);
         QT_WARNING_POP
     }
-
 
     m_pipeWireItem->setVisible(true);
     fitItemToWindow();
@@ -382,7 +379,7 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
             return;
         }
         m_window->showForStream(size);
-        // A request the window manager refuses changes nothing, so there is no size change to react to.
+        // The size may not change (refused or already capped), so refit here.
         fitItemToWindow();
     };
     connect(m_pipeWireItem, &PipeWireSourceItem::streamSizeChanged, this, matchStreamSize);

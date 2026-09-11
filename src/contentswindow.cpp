@@ -23,8 +23,7 @@
 #include <xcb/xcb.h>
 #include <xcb/xfixes.h>
 
-// Still listed by X11 share dialogs, small enough that it costs nothing if it is ever left behind or
-// stops being click-through.
+// Kept small so it's harmless if it's left behind or stops being click-through.
 static const QSize s_idleSize(64, 36);
 
 static xcb_connection_t *xcbConnection()
@@ -57,7 +56,7 @@ ContentsWindow::ContentsWindow()
     setColor(Qt::black);
     setOpacity(0);
 
-    // Flags have to be in place before the native window is created.
+    // Set before create() so the native window starts out with them.
     setFlag(Qt::WindowDoesNotAcceptFocus);
     setFlag(Qt::WindowTransparentForInput);
     setFlag(Qt::FramelessWindowHint);
@@ -106,8 +105,7 @@ void ContentsWindow::syncWindowId()
         return;
     }
 
-    // Qt destroys and recreates the native window when the screen it sits on is removed, so whatever is
-    // watching the old id has to be told about the new one.
+    // Qt can recreate the native window, so whoever watches the old id needs the new one.
     m_windowId = windowId;
     Q_EMIT windowIdChanged(m_windowId);
 }
@@ -126,8 +124,8 @@ QSize ContentsWindow::constrainToScreen(const QSize &size) const
         return size;
     }
 
-    // A window whose frame matches an output makes Mutter report that output as fullscreen, which hides the
-    // GNOME panel, and makes KWin maximise the window.
+    // Stay inside the work area. Mutter treats an output-sized window as fullscreen and hides the panel,
+    // and KWin maximises new windows that fill the work area.
     const QSize limit = currentScreen->availableSize() - QSize(1, 1);
     if (limit.isEmpty()) {
         return size;
@@ -151,8 +149,8 @@ void ContentsWindow::applyWindowState()
     static const xcb_atom_t normalType = internAtom(connection, "_NET_WM_WINDOW_TYPE_NORMAL");
     xcb_change_property(connection, XCB_PROP_MODE_REPLACE, m_windowId, windowType, XCB_ATOM_ATOM, 32, 1, &normalType);
 
-    // Never NET::FullScreen. Mutter treats a fullscreen window as owning its output and hides the GNOME panel
-    // for it, and KWin lifts fullscreen windows out of the below layer.
+    // No fullscreen or maximised state, the WM would resize us to the output or work area.
+    // Mutter also hides the panel for fullscreen windows.
     KX11Extras::clearState(m_windowId, NET::FullScreen | NET::Max);
     KX11Extras::setState(m_windowId, NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher | NET::KeepBelow);
 
@@ -166,8 +164,7 @@ void ContentsWindow::clearInputRegion()
         return;
     }
 
-    // Qt turns Qt::WindowTransparentForInput into an input region while it sets the native window up and
-    // nothing re-applies it afterwards, so set the region here instead of assuming that happened.
+    // Qt already sets this on create. We redo it anyway since click-through depends on it and it's cheap.
     const xcb_xfixes_region_t region = xcb_generate_id(connection);
     xcb_xfixes_create_region(connection, region, 0, nullptr);
     xcb_xfixes_set_window_shape_region(connection, winId(), XCB_SHAPE_SK_INPUT, 0, 0, region);
