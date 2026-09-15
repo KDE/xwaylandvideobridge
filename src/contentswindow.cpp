@@ -17,12 +17,10 @@
 #include <QResizeEvent>
 #include <QScopedPointer>
 #include <QScreen>
+#include <QVarLengthArray>
 #include <QtGui/qguiapplication_platform.h>
 
-#include <algorithm>
 #include <cstring>
-#include <iterator>
-#include <vector>
 #include <xcb/xcb.h>
 #include <xcb/xfixes.h>
 
@@ -50,34 +48,39 @@ static bool haveXFixes(xcb_connection_t *connection)
     return extension && extension->present;
 }
 
-// Qt::WindowDoesNotAcceptFocus only clears WM_HINTS.input; its xcb backend still unconditionally
-// advertises WM_TAKE_FOCUS in WM_PROTOCOLS. KWin honours WM_TAKE_FOCUS regardless of the input hint
-// (e.g. when picking a new focus target with switch to the window on the left/right/above/below),
-// which hands focus to this invisible, click-through window. Strip just that atom back
-// out, leaving whatever else Qt put in WM_PROTOCOLS (e.g. WM_DELETE_WINDOW, _NET_WM_PING) untouched.
+// Qt::WindowDoesNotAcceptFocus only clears WM_HINTS.input, the xcb backend still advertises
+// WM_TAKE_FOCUS. KWin's wantsInput() is true for anything advertising it whatever the input hint says,
+// so directional window switching can focus this invisible window. Keep the other atoms: we need
+// WM_DELETE_WINDOW for closeEvent() and _NET_WM_PING for hang detection.
 static void removeTakeFocusProtocol(xcb_connection_t *connection, xcb_window_t window)
 {
     static const xcb_atom_t protocolsAtom = internAtom(connection, "WM_PROTOCOLS");
     static const xcb_atom_t takeFocusAtom = internAtom(connection, "WM_TAKE_FOCUS");
-
-    QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter> reply(
-        xcb_get_property_reply(connection, xcb_get_property(connection, false, window, protocolsAtom, XCB_ATOM_ATOM, 0, 1024), nullptr));
-    if (!reply || reply->type != XCB_ATOM_ATOM) {
+    if (protocolsAtom == XCB_ATOM_NONE || takeFocusAtom == XCB_ATOM_NONE) {
         return;
     }
 
-    const auto *atoms = static_cast<xcb_atom_t *>(xcb_get_property_value(reply.data()));
-    const size_t count = xcb_get_property_value_length(reply.data()) / sizeof(xcb_atom_t);
-
-    std::vector<xcb_atom_t> kept;
-    kept.reserve(count);
-    std::copy_if(atoms, atoms + count, std::back_inserter(kept), [](xcb_atom_t atom) {
-        return atom != takeFocusAtom;
-    });
-
-    if (kept.size() != count) {
-        xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, protocolsAtom, XCB_ATOM_ATOM, 32, kept.size(), kept.data());
+    QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter> reply(
+        xcb_get_property_reply(connection, xcb_get_property(connection, false, window, protocolsAtom, XCB_ATOM_ATOM, 0, 1024), nullptr));
+    if (!reply || reply->type != XCB_ATOM_ATOM || reply->format != 32) {
+        return;
     }
+
+    const auto *atoms = static_cast<const xcb_atom_t *>(xcb_get_property_value(reply.data()));
+    const int count = xcb_get_property_value_length(reply.data()) / int(sizeof(xcb_atom_t));
+
+    QVarLengthArray<xcb_atom_t, 8> kept;
+    for (int i = 0; i < count; ++i) {
+        if (atoms[i] != takeFocusAtom) {
+            kept.append(atoms[i]);
+        }
+    }
+    if (kept.size() == count) {
+        return;
+    }
+
+    xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, protocolsAtom, XCB_ATOM_ATOM, 32, kept.size(), kept.constData());
+    xcb_flush(connection);
 }
 
 ContentsWindow::ContentsWindow()
@@ -140,6 +143,12 @@ void ContentsWindow::syncWindowId()
 
     // Qt can recreate the native window, so whoever watches the old id needs the new one.
     m_windowId = windowId;
+
+    // Qt writes WM_PROTOCOLS only in create(), so fix it up here, while the window is still unmapped.
+    if (auto *connection = xcbConnection()) {
+        removeTakeFocusProtocol(connection, m_windowId);
+    }
+
     Q_EMIT windowIdChanged(m_windowId);
 }
 
@@ -181,8 +190,6 @@ void ContentsWindow::applyWindowState()
     static const xcb_atom_t windowType = internAtom(connection, "_NET_WM_WINDOW_TYPE");
     static const xcb_atom_t normalType = internAtom(connection, "_NET_WM_WINDOW_TYPE_NORMAL");
     xcb_change_property(connection, XCB_PROP_MODE_REPLACE, m_windowId, windowType, XCB_ATOM_ATOM, 32, 1, &normalType);
-
-    removeTakeFocusProtocol(connection, m_windowId);
 
     // No fullscreen or maximised state, the WM would resize us to the output or work area.
     // Mutter also hides the panel for fullscreen windows.
