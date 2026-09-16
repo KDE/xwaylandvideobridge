@@ -72,13 +72,13 @@ static QString streamTitle(const Stream &stream)
     const auto sourceType = static_cast<XwaylandVideoBridge::SourceTypes>(stream.opts.value(QLatin1String("source_type"), 0u).toUInt());
     switch (sourceType) {
     case XwaylandVideoBridge::Monitor:
-        return i18n("Screen Share - Monitor");
+        return i18nc("@title:window", "Screen Share - Monitor");
     case XwaylandVideoBridge::Window:
-        return i18n("Screen Share - Window");
+        return i18nc("@title:window", "Screen Share - Window");
     case XwaylandVideoBridge::Virtual:
-        return i18n("Screen Share - Virtual");
+        return i18nc("@title:window", "Screen Share - Virtual");
     }
-    return i18n("Screen Share");
+    return i18nc("@title:window", "Screen Share");
 }
 
 static QString configFilePath()
@@ -126,17 +126,17 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
 
     m_trayIcon = new KStatusNotifierItem(this);
     m_trayIcon->setIconByName(QStringLiteral("org.kde.xwaylandvideobridge"));
-    m_trayIcon->setTitle(i18n("Wayland to X11 Video Bridge"));
+    m_trayIcon->setTitle(i18n("Xwayland Video Bridge"));
     m_trayIcon->setToolTip(QStringLiteral("org.kde.xwaylandvideobridge"),
-                           i18n("Wayland to X11 Video Bridge"),
-                           i18n("Utility to allow streaming Wayland windows to X applications"));
+                           i18n("Xwayland Video Bridge"),
+                           i18n("Offer XDG Desktop Portals screencast streams to X11 apps"));
     m_trayIcon->setStatus(KStatusNotifierItem::Passive);
     m_trayIcon->setStandardActionsEnabled(false);
 
     connect(m_trayIcon, &KStatusNotifierItem::activateRequested, this, &XwaylandVideoBridge::resetSession);
 
     auto *menu = new QMenu;
-    auto *resetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reset Bridge"));
+    auto *resetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action:inmenu", "Reset Bridge"));
     connect(resetAction, &QAction::triggered, this, &XwaylandVideoBridge::resetSession);
 
     // The window is invisible, so the tray menu is the only way to quit from the UI.
@@ -156,8 +156,8 @@ XwaylandVideoBridge::~XwaylandVideoBridge() = default;
 
 void XwaylandVideoBridge::showRunningMessage()
 {
-    m_trayIcon->showMessage(i18n("Xwayland Video Bridge is running"),
-                            i18n("Use the system tray icon to reset or quit it."),
+    m_trayIcon->showMessage(i18nc("@title", "Xwayland Video Bridge is running"),
+                            i18nc("@info", "Use the system tray icon to reset or quit it."),
                             QStringLiteral("org.kde.xwaylandvideobridge"));
 }
 
@@ -443,7 +443,7 @@ void XwaylandVideoBridge::requestAutostart()
                                                           QLatin1String("RequestBackground"));
     const QVariantMap options = {
         {QLatin1String("handle_token"), token},
-        {QLatin1String("reason"), i18n("Start the video bridge on login so X11 apps can share Wayland windows")},
+        {QLatin1String("reason"), i18nc("@info", "Start the video bridge on login so X11 apps can share Wayland windows")},
         {QLatin1String("autostart"), true},
         {QLatin1String("commandline"), QStringList{QStringLiteral("xwaylandvideobridge"), QStringLiteral("--autostart")}},
     };

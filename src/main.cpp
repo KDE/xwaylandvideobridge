@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
     QCommandLineParser parser;
     about.setupCommandLine(&parser);
-    const QCommandLineOption autostartOption(QStringLiteral("autostart"), i18n("Start without a notification"));
+    const QCommandLineOption autostartOption(QStringLiteral("autostart"), i18nc("@info:shell", "Start without a notification"));
     parser.addOption(autostartOption);
     parser.process(app);
     about.processCommandLine(&parser);
