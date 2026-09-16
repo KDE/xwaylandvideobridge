@@ -2,7 +2,6 @@
 StartupNotify=false
 X-KDE-autostart-phase=2
 X-GNOME-Autostart-enabled=true
-NoDisplay=true
 
 Type=Application
 Name=Xwayland Video Bridge

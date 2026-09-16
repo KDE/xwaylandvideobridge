@@ -15,7 +15,7 @@ This tool allows you to share specific windows with X11 clients, while keeping t
 
 ## How to use
 
-xwaylandvideobridge should autostart on login. It will run silently in the background. The next time you try to share a window, a prompt will appear asking you to select what to share. The previously selected window will then be available for sharing in the X11 application.
+xwaylandvideobridge should autostart on login. It will run silently in the background. The Flatpak has to be started once from the application menu for this. The next time you try to share a window, a prompt will appear asking you to select what to share. The previously selected window will then be available for sharing in the X11 application.
 
 The system tray icon provides finer control over the bridge.
 

@@ -30,6 +30,8 @@ public:
     explicit XwaylandVideoBridge(QObject *parent = nullptr);
     ~XwaylandVideoBridge() override;
 
+    void showRunningMessage();
+
     enum CursorMode {
         Hidden = 1,
         Embedded = 2,

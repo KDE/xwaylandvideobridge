@@ -43,5 +43,9 @@ target_link_libraries(xwaylandvideobridge
 
 install(TARGETS xwaylandvideobridge ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS org.kde.xwaylandvideobridge.desktop)
+file(READ org.kde.xwaylandvideobridge.desktop AUTOSTART_DESKTOP_FILE)
+string(REGEX REPLACE "\nExec=([^\n]*)" "\nExec=\\1 --autostart" AUTOSTART_DESKTOP_FILE "${AUTOSTART_DESKTOP_FILE}")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/autostart/org.kde.xwaylandvideobridge.desktop "${AUTOSTART_DESKTOP_FILE}")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/autostart/org.kde.xwaylandvideobridge.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
 install(FILES org.kde.xwaylandvideobridge.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

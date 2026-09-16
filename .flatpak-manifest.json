@@ -16,6 +16,7 @@
         "--share=ipc",
         "--socket=wayland",
         "--socket=x11",
+        "--talk-name=org.freedesktop.Notifications",
         "--talk-name=org.freedesktop.portal.Desktop",
         "--talk-name=org.kde.StatusNotifierWatcher"
     ],

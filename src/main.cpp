@@ -57,13 +57,24 @@ int main(int argc, char **argv)
 
     QCommandLineParser parser;
     about.setupCommandLine(&parser);
+    const QCommandLineOption autostartOption(QStringLiteral("autostart"), i18n("Start without a notification"));
+    parser.addOption(autostartOption);
     parser.process(app);
     about.processCommandLine(&parser);
 
     // A second bridge means a second invisible window competing for the same job.
     KDBusService service(KDBusService::Unique);
 
-    new XwaylandVideoBridge(&app);
+    auto *bridge = new XwaylandVideoBridge(&app);
+    if (!parser.isSet(autostartOption)) {
+        bridge->showRunningMessage();
+    }
+
+    QObject::connect(&service, &KDBusService::activateRequested, bridge, [bridge](const QStringList &arguments) {
+        if (!arguments.contains(QLatin1String("--autostart"))) {
+            bridge->showRunningMessage();
+        }
+    });
 
     return app.exec();
 }

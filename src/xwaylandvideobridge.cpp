@@ -154,6 +154,13 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
 
 XwaylandVideoBridge::~XwaylandVideoBridge() = default;
 
+void XwaylandVideoBridge::showRunningMessage()
+{
+    m_trayIcon->showMessage(i18n("Xwayland Video Bridge is running"),
+                            i18n("Use the system tray icon to reset or quit it."),
+                            QStringLiteral("org.kde.xwaylandvideobridge"));
+}
+
 void XwaylandVideoBridge::fitItemToWindow()
 {
     if (!m_pipeWireItem) {
@@ -438,7 +445,7 @@ void XwaylandVideoBridge::requestAutostart()
         {QLatin1String("handle_token"), token},
         {QLatin1String("reason"), i18n("Start the video bridge on login so X11 apps can share Wayland windows")},
         {QLatin1String("autostart"), true},
-        {QLatin1String("commandline"), QStringList{QStringLiteral("xwaylandvideobridge")}},
+        {QLatin1String("commandline"), QStringList{QStringLiteral("xwaylandvideobridge"), QStringLiteral("--autostart")}},
     };
     // No parent window: ours is invisible.
     message << QString() << options;
