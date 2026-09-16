@@ -50,6 +50,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void closeSession();
+    void backgroundResponse(uint code, const QVariantMap &results);
 
 private:
     void init();
@@ -59,11 +60,14 @@ private:
     void handleStreams(const QVector<Stream> &streams);
     void clearStream();
     void fitItemToWindow();
+    void requestAutostart();
+    void disconnectBackgroundRequest();
 
     OrgFreedesktopPortalScreenCastInterface *m_portal;
     QDBusObjectPath m_sessionPath;
     QDBusObjectPath m_requestPath;
     QString m_handleToken;
+    QDBusObjectPath m_backgroundRequestPath;
 
     QTimer *m_quitTimer;
     QScopedPointer<ContentsWindow> m_window;

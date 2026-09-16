@@ -13,13 +13,17 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusMetaType>
+#include <QDBusPendingCallWatcher>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QMenu>
 #include <QRandomGenerator>
+#include <QSettings>
+#include <QStandardPaths>
 #include <QTimer>
 
 #include <KLocalizedString>
+#include <KSandbox>
 #include <KStatusNotifierItem>
 
 #include <PipeWireSourceItem>
@@ -75,6 +79,12 @@ static QString streamTitle(const Stream &stream)
         return i18n("Screen Share - Virtual");
     }
     return i18n("Screen Share");
+}
+
+static QString configFilePath()
+{
+    // Inside Flatpak this resolves to ~/.var/app/<app id>/config.
+    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/xwaylandvideobridgerc");
 }
 
 XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
@@ -138,6 +148,8 @@ XwaylandVideoBridge::XwaylandVideoBridge(QObject *parent)
 
     // Stays mapped while idle so X11 clients can still enumerate and pick it.
     m_window->show();
+
+    requestAutostart();
 }
 
 XwaylandVideoBridge::~XwaylandVideoBridge() = default;
@@ -390,4 +402,85 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
             closeSession();
         }
     });
+}
+
+void XwaylandVideoBridge::requestAutostart()
+{
+    if (!KSandbox::isFlatpak()) {
+        return;
+    }
+
+    QSettings settings(configFilePath(), QSettings::IniFormat);
+    if (settings.value(QStringLiteral("AutostartRequested"), false).toBool()) {
+        return;
+    }
+
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!bus.isConnected()) {
+        return;
+    }
+    const QString token = QStringLiteral("xwaylandvideobridge_autostart");
+
+    const QString sender = bus.baseService().mid(1).replace(QLatin1Char('.'), QLatin1Char('_'));
+    m_backgroundRequestPath = QDBusObjectPath(QStringLiteral("/org/freedesktop/portal/desktop/request/%1/%2").arg(sender, token));
+    bus.connect(QString(),
+                m_backgroundRequestPath.path(),
+                QLatin1String("org.freedesktop.portal.Request"),
+                QLatin1String("Response"),
+                this,
+                SLOT(backgroundResponse(uint, QVariantMap)));
+
+    QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
+                                                          QLatin1String("/org/freedesktop/portal/desktop"),
+                                                          QLatin1String("org.freedesktop.portal.Background"),
+                                                          QLatin1String("RequestBackground"));
+    const QVariantMap options = {
+        {QLatin1String("handle_token"), token},
+        {QLatin1String("reason"), i18n("Start the video bridge on login so X11 apps can share Wayland windows")},
+        {QLatin1String("autostart"), true},
+        {QLatin1String("commandline"), QStringList{QStringLiteral("xwaylandvideobridge")}},
+    };
+    // No parent window: ours is invisible.
+    message << QString() << options;
+
+    auto *watcher = new QDBusPendingCallWatcher(bus.asyncCall(message), this);
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *call) {
+        call->deleteLater();
+        if (call->isError()) {
+            qCWarning(XWAYLANDBRIDGE) << "Could not request autostart from the Background portal" << call->error();
+            disconnectBackgroundRequest();
+        }
+    });
+}
+
+void XwaylandVideoBridge::backgroundResponse(uint code, const QVariantMap &results)
+{
+    disconnectBackgroundRequest();
+
+    if (code != 0 && code != 1) {
+        qCWarning(XWAYLANDBRIDGE) << "Background portal request failed:" << code << results;
+        return;
+    }
+
+    QSettings settings(configFilePath(), QSettings::IniFormat);
+    settings.setValue(QStringLiteral("AutostartRequested"), true);
+
+    if (!results.value(QLatin1String("autostart")).toBool()) {
+        qCInfo(XWAYLANDBRIDGE) << "Autostart was not enabled by the Background portal";
+    }
+}
+
+void XwaylandVideoBridge::disconnectBackgroundRequest()
+{
+    if (m_backgroundRequestPath.path().isEmpty()) {
+        return;
+    }
+
+    QDBusConnection::sessionBus().disconnect(QString(),
+                                             m_backgroundRequestPath.path(),
+                                             QLatin1String("org.freedesktop.portal.Request"),
+                                             QLatin1String("Response"),
+                                             this,
+                                             SLOT(backgroundResponse(uint, QVariantMap)));
+    m_backgroundRequestPath = {};
 }
