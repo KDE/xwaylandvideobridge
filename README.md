@@ -13,6 +13,37 @@ By design, X11 applications cannot access window or screen contents for Wayland 
 
 This tool allows you to share specific windows with X11 clients, while keeping the user in full control at all times.
 
+## Install
+
+### Nightly Flatpak
+
+Nightly builds of the master branch are published as a Flatpak. The runtime comes from Flathub:
+
+```
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install --user --or-update https://cdn.kde.org/flatpak/xwaylandvideobridge-nightly/org.kde.xwaylandvideobridge.flatpakref
+```
+
+Start it once from the application menu afterwards. It then asks to be started on login.
+
+Only one bridge runs at a time. If your distribution's package is already running, quit it from the system tray and disable its autostart entry before using the Flatpak.
+
+### Distribution packages
+
+Some distributions package xwaylandvideobridge, but their version may be older than master. Before reporting a bug, please check whether it still happens with the nightly Flatpak.
+
+### Building from source
+
+Requirements are Qt 6, KDE Frameworks 6, KPipeWire and the XCB libraries listed in `CMakeLists.txt`.
+
+```
+cmake -B build
+cmake --build build
+cmake --install build
+```
+
+With Nix, `nix build` builds the package and `nix run` starts it.
+
 ## How to use
 
 xwaylandvideobridge should autostart on login. It will run silently in the background. The Flatpak has to be started once from the application menu for this. The next time you try to share a window, a prompt will appear asking you to select what to share. The previously selected window will then be available for sharing in the X11 application.
