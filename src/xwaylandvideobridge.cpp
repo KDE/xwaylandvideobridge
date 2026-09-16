@@ -33,6 +33,8 @@
 #include "xdp_dbus_screencast_interface.h"
 #include "xwaylandvideobridge_debug.h"
 
+#include <kpipewire_version.h>
+
 Q_DECLARE_METATYPE(Stream)
 
 const QDBusArgument &operator<<(const QDBusArgument &argument, const Stream & /*stream*/)
@@ -375,9 +377,11 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
     m_pipeWireItem->setFd(reply.value().takeFileDescriptor());
 
     const Stream &stream = streams.constFirst();
-    const auto serial = stream.opts.constFind(QLatin1String("pipewire-serial"));
-    if (serial != stream.opts.constEnd()) {
-        m_pipeWireItem->setObjectSerial(serial->toULongLong());
+#if KPIPEWIRE_VERSION >= QT_VERSION_CHECK(6, 6, 90)
+    bool hasSerial = false;
+    const quint64 serial = stream.opts.value(QLatin1String("pipewire-serial")).toULongLong(&hasSerial);
+    if (hasSerial) {
+        m_pipeWireItem->setObjectSerial(serial);
     } else {
         // Pre-v6 portals only give us the node id.
         QT_WARNING_PUSH
@@ -385,6 +389,9 @@ void XwaylandVideoBridge::handleStreams(const QVector<Stream> &streams)
         m_pipeWireItem->setNodeId(stream.nodeId);
         QT_WARNING_POP
     }
+#else
+    m_pipeWireItem->setNodeId(stream.nodeId);
+#endif
 
     m_pipeWireItem->setVisible(true);
     fitItemToWindow();
